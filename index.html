@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKLATRACK - Library Management System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/users.css">
+    <link rel="stylesheet" href="css/books.css">
+    <link rel="stylesheet" href="css/borrowing.css">
+    <link rel="stylesheet" href="css/returns.css">
+    <link rel="stylesheet" href="css/overdue.css">
+    <link rel="stylesheet" href="css/records.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/reports.css">
+    <link rel="stylesheet" href="css/modals.css">
+</head>
+
+<body>
+    <section id="loginScreen" class="login-bg min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+            <div class="text-center mb-8">
+                <div class="mx-auto mb-4 w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
+                    <i data-lucide="library-big" class="w-8 h-8"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-slate-800">AKLATRACK</h1>
+                <p class="text-slate-500 mt-1">Library Borrowing Management System</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                    <input id="username" type="text" required class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                    <input id="password" type="password" required class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold">
+                    Sign In
+                </button>
+            </form>
+            <p class="text-xs text-center text-slate-400 mt-6">Demo: admin / admin123</p>
+        </div>
+    </section>
+
+    <div id="mainApp" class="hidden min-h-screen bg-slate-50">
+        <aside class="sidebar fixed inset-y-0 left-0 w-64 bg-slate-900 text-white z-40">
+            <div class="px-6 py-6 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                        <i data-lucide="library-big"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold">AKLATRACK</h2>
+                        <p class="text-xs text-slate-400">Library System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1">
+                <button data-tab="dashboard" onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="layout-dashboard" class="w-5"></i> Dashboard
+                </button>
+                <button data-tab="users" onclick="switchTab('users')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="users" class="w-5"></i> User Management
+                </button>
+                <button data-tab="books" onclick="switchTab('books')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="book-open" class="w-5"></i> Book Management
+                </button>
+                <button data-tab="borrowing" onclick="switchTab('borrowing')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="book-copy" class="w-5"></i> Borrowing
+                </button>
+                <button data-tab="returns" onclick="switchTab('returns')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="rotate-ccw" class="w-5"></i> Return Book
+                </button>
+                <button data-tab="overdue" onclick="switchTab('overdue')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="triangle-alert" class="w-5"></i> Overdue Monitoring
+                </button>
+                <button data-tab="records" onclick="switchTab('records')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="clipboard-list" class="w-5"></i> Borrower Records
+                </button>
+                <button data-tab="notifications" onclick="switchTab('notifications')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="bell" class="w-5"></i> Notifications
+                </button>
+                <button data-tab="reports" onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="bar-chart-3" class="w-5"></i> Reports & Analytics
+                </button>
+            </nav>
+
+            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+                <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-left">
+                    <i data-lucide="log-out" class="w-5"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="ml-64 min-h-screen">
+            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-30">
+                <div>
+                    <h1 id="pageTitle" class="font-bold text-slate-800">Dashboard</h1>
+                    <p class="text-xs text-slate-500">Library administration</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-slate-700">Librarian</p>
+                        <p class="text-xs text-slate-400">Administrator</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">L</div>
+                </div>
+            </header>
+
+            <div class="main-content p-8">
+                <section id="dashboard" class="page-section">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">Dashboard</h2>
+                        <p class="text-slate-500">Overview of library activities.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Total Books</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-2">1,248</h3>
+                        </div>
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Borrowed Books</p>
+                            <h3 class="text-3xl font-bold text-blue-600 mt-2">184</h3>
+                        </div>
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Overdue</p>
+                            <h3 class="text-3xl font-bold text-red-600 mt-2">27</h3>
+                        </div>
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Registered Users</p>
+                            <h3 class="text-3xl font-bold text-emerald-600 mt-2">612</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">Book Circulation</h3>
+                            <canvas id="circulationChart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                            <h3 class="font-bold text-slate-800 mb-4">Book Status</h3>
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="users" class="page-section hidden">
+                    <div class="section-header">
+                        <div><h2 class="text-2xl font-bold">User Management</h2><p class="text-slate-500">Manage library borrowers.</p></div>
+                        <button onclick="openModal('borrowerModal')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold">Add Borrower</button>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <input oninput="filterUsersTable(this.value)" placeholder="Search borrower..." class="w-full md:w-80 px-4 py-3 border rounded-xl mb-5">
+                        <div class="overflow-x-auto">
+                            <table class="users-table w-full text-left">
+                                <thead><tr class="border-b text-sm text-slate-500"><th class="p-3">ID</th><th class="p-3">Name</th><th class="p-3">Type</th><th class="p-3">Contact</th><th class="p-3">Status</th></tr></thead>
+                                <tbody id="usersTableBody">
+                                    <tr><td class="p-3">BR-001</td><td class="p-3">Juan Dela Cruz</td><td class="p-3">Student</td><td class="p-3">0912-345-6789</td><td class="p-3"><span class="badge badge-green">Active</span></td></tr>
+                                    <tr><td class="p-3">BR-002</td><td class="p-3">Maria Santos</td><td class="p-3">Faculty</td><td class="p-3">0917-222-1111</td><td class="p-3"><span class="badge badge-green">Active</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="books" class="page-section hidden">
+                    <div class="section-header">
+                        <div><h2 class="text-2xl font-bold">Book Management</h2><p class="text-slate-500">Manage library books and availability.</p></div>
+                        <button onclick="openModal('bookModal')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold">Add Book</button>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <input oninput="filterBooksTable(this.value)" placeholder="Search book..." class="w-full md:w-80 px-4 py-3 border rounded-xl mb-5">
+                        <div class="overflow-x-auto">
+                            <table class="books-table w-full text-left">
+                                <thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Accession No.</th><th class="p-3">Title</th><th class="p-3">Author</th><th class="p-3">Category</th><th class="p-3">Status</th></tr></thead>
+                                <tbody id="booksTableBody">
+                                    <tr><td class="p-3">BK-0001</td><td class="p-3">Introduction to Computing</td><td class="p-3">John Smith</td><td class="p-3">IT</td><td class="p-3"><span class="badge badge-green">Available</span></td></tr>
+                                    <tr><td class="p-3">BK-0002</td><td class="p-3">Database Systems</td><td class="p-3">Thomas Connolly</td><td class="p-3">IT</td><td class="p-3"><span class="badge badge-blue">Borrowed</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="borrowing" class="page-section hidden">
+                    <div class="section-header"><div><h2 class="text-2xl font-bold">Borrowing Management</h2><p class="text-slate-500">Record and monitor active borrowing transactions.</p></div></div>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <div class="overflow-x-auto"><table class="borrowing-table w-full text-left">
+                            <thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Transaction</th><th class="p-3">Borrower</th><th class="p-3">Book</th><th class="p-3">Borrow Date</th><th class="p-3">Due Date</th><th class="p-3">Status</th></tr></thead>
+                            <tbody><tr><td class="p-3">TR-1001</td><td class="p-3">Juan Dela Cruz</td><td class="p-3">Database Systems</td><td class="p-3">09/20/2026</td><td class="p-3">09/27/2026</td><td class="p-3"><span class="badge badge-blue">Active</span></td></tr></tbody>
+                        </table></div>
+                    </div>
+                </section>
+
+                <section id="returns" class="page-section hidden">
+                    <div class="section-header"><div><h2 class="text-2xl font-bold">Return Book</h2><p class="text-slate-500">Process returned library materials.</p></div></div>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 max-w-2xl">
+                        <form onsubmit="processReturnSubmit(event)" class="space-y-4">
+                            <input id="returnTransaction" required placeholder="Transaction ID" class="w-full px-4 py-3 border rounded-xl">
+                            <input id="returnBook" required placeholder="Book / Accession Number" class="w-full px-4 py-3 border rounded-xl">
+                            <button class="bg-blue-600 text-white px-5 py-3 rounded-xl font-semibold">Process Return</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="overdue" class="page-section hidden">
+                    <div class="section-header"><div><h2 class="text-2xl font-bold">Overdue Monitoring</h2><p class="text-slate-500">Monitor overdue borrowed books.</p></div><button onclick="triggerBulkReminders()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold">Send Reminders</button></div>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6"><table class="w-full text-left"><thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Borrower</th><th class="p-3">Book</th><th class="p-3">Due Date</th><th class="p-3">Days Overdue</th></tr></thead><tbody><tr class="overdue-row"><td class="p-3">Maria Santos</td><td class="p-3">Web Development Basics</td><td class="p-3">09/18/2026</td><td class="p-3 text-red-600 font-semibold">8 days</td></tr></tbody></table></div>
+                </section>
+
+                <section id="records" class="page-section hidden">
+                    <div class="section-header"><div><h2 class="text-2xl font-bold">Borrower Records</h2><p class="text-slate-500">View borrowing history.</p></div></div>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6"><table class="w-full text-left"><thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Borrower</th><th class="p-3">Total Borrowed</th><th class="p-3">Returned</th><th class="p-3">Overdue</th></tr></thead><tbody><tr class="record-row"><td class="p-3">Juan Dela Cruz</td><td class="p-3">25</td><td class="p-3">24</td><td class="p-3">1</td></tr></tbody></table></div>
+                </section>
+
+                <section id="notifications" class="page-section hidden">
+                    <div class="section-header"><div><h2 class="text-2xl font-bold">Notifications</h2><p class="text-slate-500">Library reminders and notices.</p></div></div>
+                    <div class="space-y-3">
+                        <div class="notification-item bg-white border rounded-2xl p-5"><b>Overdue Reminder</b><p class="text-sm text-slate-500 mt-1">Maria Santos has an overdue book.</p></div>
+                        <div class="notification-item bg-white border rounded-2xl p-5"><b>Return Due</b><p class="text-sm text-slate-500 mt-1">A borrowed book is due tomorrow.</p></div>
+                    </div>
+                </section>
+
+                <section id="reports" class="page-section hidden">
+                    <div class="section-header"><div><h2 class="text-2xl font-bold">Reports & Analytics</h2><p class="text-slate-500">Library activity summaries and reports.</p></div><button onclick="exportReport()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold no-print">Print Report</button></div>
+                    <div class="print-area">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="report-card bg-white rounded-2xl border p-6"><h3 class="font-bold mb-4">Monthly Circulation</h3><canvas id="reportBarChart"></canvas></div>
+                            <div class="report-card bg-white rounded-2xl border p-6"><h3 class="font-bold mb-4">Borrower Categories</h3><canvas id="reportDonutChart"></canvas></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="borrowerModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="modal-content bg-white rounded-2xl w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-5"><h3 class="text-xl font-bold">Add Borrower</h3><button onclick="closeModal('borrowerModal')"><i data-lucide="x"></i></button></div>
+            <form onsubmit="handleAddBorrower(event)" class="space-y-4">
+                <input id="borrowerName" required placeholder="Full Name" class="w-full px-4 py-3 border rounded-xl">
+                <input id="borrowerContact" required placeholder="Contact Number" class="w-full px-4 py-3 border rounded-xl">
+                <select id="borrowerType" class="w-full px-4 py-3 border rounded-xl"><option>Student</option><option>Faculty</option><option>Staff</option></select>
+                <div class="flex justify-end gap-3"><button type="button" onclick="closeModal('borrowerModal')" class="px-4 py-2 rounded-xl border">Cancel</button><button class="px-4 py-2 rounded-xl bg-blue-600 text-white">Save Borrower</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="bookModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="modal-content bg-white rounded-2xl w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-5"><h3 class="text-xl font-bold">Add Book</h3><button onclick="closeModal('bookModal')"><i data-lucide="x"></i></button></div>
+            <form onsubmit="handleAddBook(event)" class="space-y-4">
+                <input id="bookTitle" required placeholder="Book Title" class="w-full px-4 py-3 border rounded-xl">
+                <input id="bookAuthor" required placeholder="Author" class="w-full px-4 py-3 border rounded-xl">
+                <input id="bookCategory" required placeholder="Category" class="w-full px-4 py-3 border rounded-xl">
+                <div class="flex justify-end gap-3"><button type="button" onclick="closeModal('bookModal')" class="px-4 py-2 rounded-xl border">Cancel</button><button class="px-4 py-2 rounded-xl bg-blue-600 text-white">Save Book</button></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/books.js"></script>
+    <script src="js/borrowing.js"></script>
+    <script src="js/returns.js"></script>
+    <script src="js/overdue.js"></script>
+    <script src="js/records.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/modals.js"></script>
+</body>
+</html>

@@ -913,7 +913,7 @@
                                 <button type="button" class="overdue-more-filters-btn" onclick="toggleOverdueMoreFilters()">
                                     <i data-lucide="sliders-horizontal"></i> More Filters
                                 </button>
-                                <button type="button" class="overdue-reminders-btn" onclick="triggerBulkReminders()">
+                                <button type="button" class="overdue-reminders-btn" onclick="openBulkRemindersModal()">
                                     <i data-lucide="send"></i> Send Bulk Reminders
                                 </button>
                             </div>
@@ -1314,6 +1314,120 @@
                     <span>Action</span>
                 </div>
                 <div id="deleteBookList" class="delete-book-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bulkRemindersModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="bulk-reminders-modal modal-content">
+            <div class="bulk-reminders-header">
+                <div class="bulk-reminders-title">
+                    <span class="bulk-reminders-title-icon"><i data-lucide="mail-check"></i></span>
+                    <div>
+                        <h3>Send Bulk Reminders</h3>
+                        <p>Dispatch automated notifications to borrowers with active overdue items.</p>
+                    </div>
+                </div>
+                <button type="button" class="bulk-reminders-close" aria-label="Close" onclick="closeModal('bulkRemindersModal')"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="bulk-reminders-body">
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">1. Select Target Recipient Group <span class="required-mark">*</span></p>
+                    <div class="recipient-group-grid">
+                        <label class="recipient-option">
+                            <input type="radio" name="reminderGroup" value="all" checked onchange="updateBulkRemindersSummary()">
+                            <span class="recipient-option-text">
+                                <strong>All Overdue (<span id="recipientAllCount">48</span>)</strong>
+                                <small>All 48 books</small>
+                            </span>
+                        </label>
+                        <label class="recipient-option">
+                            <input type="radio" name="reminderGroup" value="1-7" onchange="updateBulkRemindersSummary()">
+                            <span class="recipient-option-text">
+                                <strong>1-7 Days Late (<span id="recipientLateCount">22</span>)</strong>
+                                <small>First reminder batch</small>
+                            </span>
+                        </label>
+                        <label class="recipient-option">
+                            <input type="radio" name="reminderGroup" value="30+" onchange="updateBulkRemindersSummary()">
+                            <span class="recipient-option-text">
+                                <strong>30+ Days Critical (<span id="recipientCriticalCount">12</span>)</strong>
+                                <small>Final notice &amp; legal action</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">2. Delivery Channels</p>
+                    <div class="channel-options">
+                        <label class="channel-option">
+                            <input type="checkbox" id="reminderChannelEmail" checked onchange="updateBulkRemindersSummary()">
+                            <span class="channel-option-text">
+                                <strong>Email Notification</strong>
+                                <small>Registered email address</small>
+                            </span>
+                        </label>
+                        <label class="channel-option">
+                            <input type="checkbox" id="reminderChannelSms" onchange="updateBulkRemindersSummary()">
+                            <span class="channel-option-text">
+                                <strong>SMS Notification</strong>
+                                <small>Registered mobile number</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">3. Select Reminder Template</p>
+                    <select id="reminderTemplate" class="bulk-reminders-select" onchange="updateBulkReminderPreview()">
+                        <option value="standard">Standard Overdue Notice (Includes Book Details)</option>
+                        <option value="first">First Reminder (Friendly Reminder)</option>
+                        <option value="final">Final Notice (Legal Warning)</option>
+                    </select>
+                    <div class="message-preview">
+                        <p class="message-preview-title">Message Preview</p>
+                        <p class="message-preview-subject" id="reminderPreviewSubject"></p>
+                        <p class="message-preview-body" id="reminderPreviewBody"></p>
+                    </div>
+                    <div class="message-preview sms-preview hidden" id="reminderSmsPreview">
+                        <p class="message-preview-title">SMS Preview (Max 160 characters)</p>
+                        <p class="message-preview-body" id="reminderSmsPreviewBody"></p>
+                        <p class="message-preview-count" id="reminderSmsPreviewCount"></p>
+                    </div>
+                </div>
+
+                <div class="dispatch-summary">
+                    <span class="dispatch-summary-icon"><i data-lucide="circle-check"></i></span>
+                    <div>
+                        <strong>Ready to Dispatch</strong>
+                        <p id="reminderDispatchSummaryText">Total Message: 48 Emails • Target: 48 Borrowers</p>
+                    </div>
+                </div>
+
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">4. Dispatch Time</p>
+                    <div class="dispatch-time-row">
+                        <label class="dispatch-time-option">
+                            <input type="radio" name="reminderDispatchTime" value="now" checked onchange="updateBulkRemindersSummary()">
+                            <span>Send Immediately</span>
+                        </label>
+                        <label class="dispatch-time-option">
+                            <input type="radio" name="reminderDispatchTime" value="schedule" onchange="updateBulkRemindersSummary()">
+                            <span>Schedule for Later Date</span>
+                        </label>
+                        <input id="reminderScheduleDate" type="date" class="bulk-reminders-date hidden" disabled aria-label="Schedule date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bulk-reminders-actions">
+                <p id="bulkRemindersError" class="bulk-reminders-error hidden"></p>
+                <div class="bulk-reminders-buttons">
+                    <button type="button" class="bulk-reminders-send" onclick="sendBulkReminders()"><i data-lucide="send"></i> Send Reminders Now</button>
+                    <button type="button" class="bulk-reminders-cancel" onclick="closeModal('bulkRemindersModal')">Cancel</button>
+                </div>
             </div>
         </div>
     </div>

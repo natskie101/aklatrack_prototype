@@ -71,6 +71,62 @@
 .overdue-page-btn:disabled{color:#cbd5e1;cursor:not-allowed}
 .overdue-page-ellipsis{padding:0 2px;color:#94a3b8}
 
+.bulk-reminders-modal{width:min(100%,620px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;background:#fff;border-radius:18px;box-shadow:0 24px 55px rgba(15,23,42,.22);overflow:hidden}
+.bulk-reminders-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 14px;border-bottom:1px solid #eef2f7}
+.bulk-reminders-title{display:flex;align-items:flex-start;gap:12px}
+.bulk-reminders-title-icon{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:#dbeafe;color:#1d4ed8;flex:0 0 auto}
+.bulk-reminders-title-icon svg{width:18px;height:18px}
+.bulk-reminders-title h3{margin:0;font-size:1.02rem;font-weight:800;color:#1f2937}
+.bulk-reminders-title p{margin:3px 0 0;font-size:.8rem;color:#64748b}
+.bulk-reminders-close{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:none;border-radius:8px;background:transparent;color:#64748b;cursor:pointer;flex:0 0 auto}
+.bulk-reminders-close:hover{background:#f1f5f9}
+.bulk-reminders-close svg{width:17px;height:17px}
+.bulk-reminders-body{padding:16px 20px 4px;overflow-y:auto}
+.bulk-reminders-section{margin-bottom:16px}
+.bulk-reminders-label{margin:0 0 8px;font-size:.82rem;font-weight:700;color:#334155}
+.bulk-reminders-label .required-mark{color:#ef4444}
+.recipient-group-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.recipient-option{display:flex;align-items:flex-start;gap:9px;padding:11px 12px;border:1px solid #dfe7f1;border-radius:11px;background:#fff;cursor:pointer}
+.recipient-option:hover{border-color:#bfdbfe;background:#f8fbff}
+.recipient-option input{margin:3px 0 0;accent-color:#2563eb;flex:0 0 auto}
+.recipient-option-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.recipient-option-text strong{font-size:.83rem;font-weight:700;color:#1f2937}
+.recipient-option-text small{font-size:.75rem;color:#94a3b8}
+.recipient-option:has(input:checked){border-color:#2563eb;background:#f5f9ff;box-shadow:0 0 0 2px rgba(37,99,235,.1)}
+.channel-options{display:flex;flex-direction:column;gap:8px}
+.channel-option{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border:1px solid #dfe7f1;border-radius:10px;background:#fff;cursor:pointer}
+.channel-option:hover{border-color:#bfdbfe;background:#f8fbff}
+.channel-option input{margin:2px 0 0;accent-color:#2563eb;flex:0 0 auto}
+.channel-option-text{display:flex;flex-direction:column;gap:1px;min-width:0}
+.channel-option-text strong{font-size:.83rem;font-weight:700;color:#1f2937}
+.channel-option-text small{font-size:.74rem;color:#94a3b8}
+.bulk-reminders-select{width:100%;height:40px;border:1px solid #dfe7f1;border-radius:10px;background:#fff;color:#334155;font-size:.85rem;font-weight:600;padding:0 12px;outline:none;cursor:pointer;margin-bottom:10px}
+.message-preview{padding:12px 14px;border:1px solid #e6edf6;border-radius:11px;background:#f8fafc}
+.message-preview.sms-preview{margin-top:10px;background:#f5f9ff;border-color:#dbeafe}
+.message-preview-title{margin:0 0 6px;font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#64748b}
+.message-preview-subject{margin:0 0 6px;font-size:.82rem;font-weight:700;color:#1f2937}
+.message-preview-body{margin:0;font-size:.82rem;line-height:1.5;color:#475569;white-space:pre-line}
+.message-preview-count{margin:6px 0 0;font-size:.72rem;font-weight:600;color:#64748b}
+.dispatch-summary{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;margin-bottom:16px;border:1px solid #bbf7d0;border-radius:11px;background:#f0fdf4}
+.dispatch-summary-icon{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#dcfce7;color:#16a34a;flex:0 0 auto}
+.dispatch-summary-icon svg{width:15px;height:15px}
+.dispatch-summary strong{display:block;font-size:.86rem;font-weight:800;color:#166534}
+.dispatch-summary p{margin:2px 0 0;font-size:.79rem;color:#15803d}
+.dispatch-time-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.dispatch-time-option{display:inline-flex;align-items:center;gap:8px;font-size:.84rem;font-weight:600;color:#334155;cursor:pointer}
+.dispatch-time-option input{accent-color:#2563eb}
+.bulk-reminders-date{height:38px;border:1px solid #dfe7f1;border-radius:9px;background:#fff;color:#334155;font-size:.82rem;padding:0 10px;outline:none}
+.bulk-reminders-date.hidden{display:none}
+.bulk-reminders-actions{display:flex;flex-direction:column;gap:10px;padding:14px 20px 18px;border-top:1px solid #eef2f7}
+.bulk-reminders-error{margin:0;font-size:.8rem;font-weight:600;color:#b91c1c}
+.bulk-reminders-error.hidden{display:none}
+.bulk-reminders-buttons{display:flex;align-items:center;gap:10px}
+.bulk-reminders-send{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:none;border-radius:10px;background:#2563eb;color:#fff;font-size:.86rem;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(37,99,235,.2)}
+.bulk-reminders-send:hover{background:#1d4ed8}
+.bulk-reminders-send svg{width:16px;height:16px}
+.bulk-reminders-cancel{height:40px;padding:0 16px;border:1px solid #d7e0ef;border-radius:10px;background:#fff;color:#334155;font-size:.86rem;font-weight:700;cursor:pointer}
+.bulk-reminders-cancel:hover{background:#f8fafc}
+
 /* legacy row styling kept for older markup */
 .overdue-row{background:#fff7ed}
 .overdue-row:hover{background:#ffedd5}

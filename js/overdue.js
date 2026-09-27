@@ -59,9 +59,11 @@ function getOverdueFeaturedSeed(){
 
 const OVERDUE_EXTRA_BORROWERS = ['Erin Rainer','Elena Petrova','Robert Chen','Maria Santos','Nina Alvarez','Paolo Reyes','Grace Uy','Hector Diaz','Liza Mercado','Sam Tan','Rosa Bautista','Victor Lim','Dana Cruz','Omar Santos','Kyle Yap','Bea Fernandez','Noel Rivera','Tricia Gomez','Aldrin Reyes','Mia Tan'];
 const OVERDUE_EXTRA_BOOKS = ['Data Structures & Algorithms in Java','Operating System Concepts','Clean Code','Introduction to Database Management','Software Engineering: A Practitioner Approach','Discrete Mathematics and Its Applications','Fundamentals of Physics','Philippine Constitutional Law','Principles of Economics','Calculus: Early Transcendentals','Statistical Methods for Research','Business Ethics and Social Responsibility','Hospitality Management Essentials','Tourism Planning and Development','Criminal Justice Today','Management Accounting Principles','Anatomy and Physiology','Nursing Informatics','Web Programming with PHP & MySQL','Mobile Application Development','Human Resource Management','Financial Accounting Fundamentals','Obligations and Contracts Law','Agricultural Economics','Environmental Science Today'];
-/* 39 extra records, 10 of them critical (more than 30 days overdue) so the module
-   totals read 48 overdue books / 12 critical, matching the design. */
-const OVERDUE_EXTRA_DAYS = [45,18,25,38,8,12,52,5,3,33,20,16,66,29,11,7,4,2,19,13,30,17,21,42,26,28,15,6,23,35,24,1,9,55,10,14,22,50,48];
+/* 39 extra records: 10 of them critical (more than 30 days overdue) so the module
+   totals read 48 overdue books / 12 critical, matching the design. The day counts
+   are spread so the recipient groups in the dispatch modal read 1-7 days (22),
+   8-30 days (14) and 30+ days critical (12). */
+const OVERDUE_EXTRA_DAYS = [45,7,6,38,5,4,41,30,2,1,29,7,6,5,28,4,30,2,1,26,7,52,6,33,5,24,4,36,21,2,58,66,7,42,25,18,5,55,4];
 /* Exactly 5 generated records are still waiting for a notice, which keeps the
    "Pending Notices" card at 8 (3 of the featured rows are pending too). */
 const OVERDUE_EXTRA_NOTICES = ['Escalated','Notice Sent','Notice Sent','Resolved','Notice Sent','Pending','Pending','Notice Sent','Resolved','Notice Sent','Resolved','Notice Sent','Pending','Notice Sent','Resolved','Notice Sent','Resolved','Notice Sent','Pending','Notice Sent','Resolved','Escalated','Notice Sent','Escalated','Notice Sent','Resolved','Notice Sent','Resolved','Notice Sent','Resolved','Notice Sent','Resolved','Escalated','Notice Sent','Escalated','Notice Sent','Escalated','Notice Sent','Pending'];
@@ -266,17 +268,162 @@ function showOverdueMessage(text, state){
     if(state === 'error') messageEl.classList.add('is-error');
 }
 
-/* Sends reminders for every record that is still waiting for a notice in the
-   current view, then refreshes the notice status pills and the counters. */
-function triggerBulkReminders(){
-    const pending = getFilteredOverdueRecords().filter((record) => record.noticeStatus === 'Pending');
-    if(!pending.length){
-        showOverdueMessage('No pending notices in the current view - nothing to send.','error');
+/* Reminder templates available in the bulk dispatch modal. [Placeholders] are
+   filled in per borrower when the reminders are dispatched. */
+const BULK_REMINDER_TEMPLATES = {
+    standard: {
+        subject: 'Library Notice: Overdue Book Return Reminder',
+        body: 'Dear [Borrower_Name],\nThis is a reminder that "[Book_Title]" was due on [Due_Date]. Please return it to the library or contact the librarian at [Librarian_Phone].\nThank you,\n[School_Name] College of Technology library office.',
+        sms: 'LIBRARY NOTICE: Dear [Borrower_Name], "[Book_Title]" was due on [Due_Date]. Kindly return it or contact [Librarian_Phone]. [School_Name] Library.'
+    },
+    first: {
+        subject: 'Friendly Reminder: Please Return Your Borrowed Book',
+        body: 'Hi [Borrower_Name],\nOur records show that "[Book_Title]" is [Days_Overdue] day(s) overdue (due on [Due_Date]). Please return it on your next library visit.\nThank you,\n[School_Name] College of Technology library office.',
+        sms: 'REMINDER: Hi [Borrower_Name], "[Book_Title]" is [Days_Overdue] day(s) overdue. Please return it soon. [School_Name] Library.'
+    },
+    final: {
+        subject: 'FINAL NOTICE: Overdue Book - PHP 10 per Day Penalty',
+        body: 'Dear [Borrower_Name],\n"[Book_Title]" is [Days_Overdue] days overdue (due on [Due_Date]). A penalty of PHP 10 per day is being charged and your borrowing account may be suspended.\nPlease settle at the library office immediately.\n[School_Name] College of Technology library office.',
+        sms: 'FINAL NOTICE: "[Book_Title]" is [Days_Overdue] days overdue. PHP 10/day penalty applies and your account may be suspended. [School_Name] Library.'
+    }
+};
+
+function getReminderGroupValue(){
+    const checked = document.querySelector('#bulkRemindersModal input[name="reminderGroup"]:checked');
+    return checked ? checked.value : 'all';
+}
+
+function getReminderGroupRecords(){
+    const group = getReminderGroupValue();
+    return ensureOverdueData().filter((record) => {
+        const days = getOverdueDays(record);
+        if(group === '1-7') return days >= 1 && days <= 7;
+        if(group === '30+') return days > 30;
+        return true;
+    });
+}
+
+function getReminderChannelNames(){
+    const channels = [];
+    const emailEl = document.getElementById('reminderChannelEmail');
+    const smsEl = document.getElementById('reminderChannelSms');
+    if(emailEl && emailEl.checked) channels.push('Email');
+    if(smsEl && smsEl.checked) channels.push('SMS');
+    return channels;
+}
+
+function getReminderDispatchTime(){
+    const checked = document.querySelector('#bulkRemindersModal input[name="reminderDispatchTime"]:checked');
+    return checked ? checked.value : 'now';
+}
+
+function showBulkRemindersError(text){
+    const errorEl = document.getElementById('bulkRemindersError');
+    if(!errorEl) return;
+    errorEl.textContent = text || '';
+    errorEl.classList.toggle('hidden', !text);
+}
+
+function updateBulkReminderPreview(){
+    const select = document.getElementById('reminderTemplate');
+    const template = BULK_REMINDER_TEMPLATES[select ? select.value : 'standard'] || BULK_REMINDER_TEMPLATES.standard;
+    const subjectEl = document.getElementById('reminderPreviewSubject');
+    const bodyEl = document.getElementById('reminderPreviewBody');
+    const smsBodyEl = document.getElementById('reminderSmsPreviewBody');
+    const smsCountEl = document.getElementById('reminderSmsPreviewCount');
+    if(subjectEl) subjectEl.textContent = 'Subject Line: ' + template.subject;
+    if(bodyEl) bodyEl.textContent = template.body;
+    if(smsBodyEl) smsBodyEl.textContent = template.sms;
+    if(smsCountEl) smsCountEl.textContent = template.sms.length + ' / 160 characters';
+}
+
+function updateBulkRemindersSummary(){
+    const all = ensureOverdueData();
+    const late = all.filter((record) => getOverdueDays(record) >= 1 && getOverdueDays(record) <= 7);
+    const critical = all.filter((record) => getOverdueDays(record) > 30);
+    const allEl = document.getElementById('recipientAllCount');
+    const lateEl = document.getElementById('recipientLateCount');
+    const criticalEl = document.getElementById('recipientCriticalCount');
+    if(allEl) allEl.textContent = String(all.length);
+    if(lateEl) lateEl.textContent = String(late.length);
+    if(criticalEl) criticalEl.textContent = String(critical.length);
+
+    const channels = getReminderChannelNames();
+    const targets = getReminderGroupRecords();
+    const scheduled = getReminderDispatchTime() === 'schedule';
+    const scheduleInput = document.getElementById('reminderScheduleDate');
+    if(scheduleInput){
+        scheduleInput.classList.toggle('hidden', !scheduled);
+        scheduleInput.disabled = !scheduled;
+        if(!scheduled) scheduleInput.value = '';
+    }
+
+    const summaryEl = document.getElementById('reminderDispatchSummaryText');
+    if(summaryEl){
+        const parts = channels.map((channel) => targets.length + ' ' + (channel === 'Email' && targets.length !== 1 ? 'Emails' : channel));
+        const messagePart = parts.length ? parts.join(' • ') : 'No channel selected';
+        const borrowerWord = targets.length === 1 ? 'Borrower' : 'Borrowers';
+        summaryEl.textContent = 'Total Message: ' + messagePart + ' • Target: ' + targets.length + ' ' + borrowerWord + (scheduled ? ' • Scheduled' : '');
+    }
+
+    const smsPreview = document.getElementById('reminderSmsPreview');
+    if(smsPreview) smsPreview.classList.toggle('hidden', channels.indexOf('SMS') === -1);
+
+    showBulkRemindersError('');
+    updateBulkReminderPreview();
+    if(window.lucide) lucide.createIcons();
+}
+
+function openBulkRemindersModal(){
+    ensureOverdueData();
+    const groupAll = document.querySelector('#bulkRemindersModal input[name="reminderGroup"][value="all"]');
+    if(groupAll) groupAll.checked = true;
+    const emailEl = document.getElementById('reminderChannelEmail');
+    const smsEl = document.getElementById('reminderChannelSms');
+    if(emailEl) emailEl.checked = true;
+    if(smsEl) smsEl.checked = false;
+    const templateSelect = document.getElementById('reminderTemplate');
+    if(templateSelect) templateSelect.value = 'standard';
+    const dispatchNow = document.querySelector('#bulkRemindersModal input[name="reminderDispatchTime"][value="now"]');
+    if(dispatchNow) dispatchNow.checked = true;
+    updateBulkRemindersSummary();
+    openModal('bulkRemindersModal');
+}
+
+function sendBulkReminders(){
+    const channels = getReminderChannelNames();
+    if(!channels.length){
+        showBulkRemindersError('Select at least one delivery channel (Email or SMS).');
         return;
     }
-    pending.forEach((record) => { record.noticeStatus = 'Notice Sent'; });
+    const targets = getReminderGroupRecords();
+    if(!targets.length){
+        showBulkRemindersError('No overdue records match the selected recipient group.');
+        return;
+    }
+    const scheduled = getReminderDispatchTime() === 'schedule';
+    const scheduleInput = document.getElementById('reminderScheduleDate');
+    const scheduleValue = scheduleInput ? scheduleInput.value : '';
+    if(scheduled && !scheduleValue){
+        showBulkRemindersError('Choose a date for the scheduled dispatch.');
+        return;
+    }
+
+    if(scheduled){
+        const scheduledDate = formatOverdueDate(new Date(scheduleValue + 'T00:00:00'));
+        showOverdueMessage(targets.length + ' ' + (targets.length === 1 ? 'reminder' : 'reminders') + ' (' + channels.join(' + ') + ') scheduled for ' + scheduledDate + '.','success');
+    } else {
+        targets.filter((record) => record.noticeStatus === 'Pending').forEach((record) => { record.noticeStatus = 'Notice Sent'; });
+        showOverdueMessage(targets.length + ' ' + (targets.length === 1 ? 'reminder' : 'reminders') + ' sent via ' + channels.join(' + ') + ' • ' + targets.length + ' ' + (targets.length === 1 ? 'borrower' : 'borrowers') + ' notified.','success');
+    }
+
+    closeModal('bulkRemindersModal');
     renderOverdueTable();
-    showOverdueMessage(pending.length + (pending.length === 1 ? ' reminder' : ' reminders') + ' sent to the borrowers listed in the current view.','success');
+}
+
+/* Kept for backwards compatibility - opens the bulk dispatch modal. */
+function triggerBulkReminders(){
+    openBulkRemindersModal();
 }
 
 function refreshOverdue(){

@@ -105,7 +105,7 @@
                     <i data-lucide="users" class="w-5"></i> Borrowers
                 </button>
                 <button data-tab="reports" onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
-                    <i data-lucide="bar-chart-3" class="w-5"></i> Reports & Analytics
+                    <i data-lucide="file-text" class="w-5"></i> Reports
                 </button>
             </nav>
 
@@ -971,11 +971,94 @@
                 </section>
 
                 <section id="reports" class="page-section hidden">
-                    <div class="section-header"><div><h2 class="text-2xl font-bold">Reports & Analytics</h2><p class="text-slate-500">Library activity summaries and reports.</p></div><button onclick="exportReport()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold no-print">Print Report</button></div>
-                    <div class="print-area">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="report-card bg-white rounded-2xl border p-6"><h3 class="font-bold mb-4">Monthly Circulation</h3><canvas id="reportBarChart"></canvas></div>
-                            <div class="report-card bg-white rounded-2xl border p-6"><h3 class="font-bold mb-4">Borrower Categories</h3><canvas id="reportDonutChart"></canvas></div>
+                    <div class="reports-shell">
+                        <div class="section-header reports-header">
+                            <div>
+                                <h2>Reports</h2>
+                                <p>Daily list of books borrowed and returned.</p>
+                            </div>
+                            <button type="button" class="report-print-btn no-print" onclick="printReport()"><i data-lucide="printer"></i> Print Report</button>
+                        </div>
+
+                        <div class="print-area">
+                            <div class="report-print-heading print-only">
+                                <h3>AKLATRACK - Daily Library Report</h3>
+                                <p id="reportPrintDate">—</p>
+                            </div>
+
+                            <div class="reports-toolbar no-print">
+                                <div class="report-date-filter">
+                                    <span class="report-date-icon"><i data-lucide="calendar-days"></i></span>
+                                    <input id="reportDateFilter" type="date" aria-label="Select report date" onchange="applyReportDate()">
+                                </div>
+                                <button type="button" class="report-day-btn" aria-label="Previous day" onclick="shiftReportDate(-1)"><i data-lucide="chevron-left"></i></button>
+                                <button type="button" class="report-day-btn" aria-label="Next day" onclick="shiftReportDate(1)"><i data-lucide="chevron-right"></i></button>
+                                <button type="button" class="report-today-btn" onclick="goToTodayReport()">Today</button>
+                                <div class="reports-segmented" id="reportTypeFilters">
+                                    <button type="button" class="report-seg active" data-type="all" onclick="setReportType('all', this)">All Activity</button>
+                                    <button type="button" class="report-seg" data-type="borrow" onclick="setReportType('borrow', this)">Borrowed</button>
+                                    <button type="button" class="report-seg" data-type="return" onclick="setReportType('return', this)">Returned</button>
+                                </div>
+                            </div>
+
+                            <div class="report-stats-row">
+                                <div class="report-stat-card">
+                                    <div class="report-stat-info">
+                                        <span>Books Borrowed</span>
+                                        <strong id="reportBorrowedCount">0</strong>
+                                        <small>Issued on the selected date</small>
+                                    </div>
+                                    <div class="report-stat-icon icon-borrow"><i data-lucide="book-copy"></i></div>
+                                </div>
+                                <div class="report-stat-card">
+                                    <div class="report-stat-info">
+                                        <span>Books Returned</span>
+                                        <strong id="reportReturnedCount">0</strong>
+                                        <small>Received on the selected date</small>
+                                    </div>
+                                    <div class="report-stat-icon icon-return"><i data-lucide="rotate-ccw"></i></div>
+                                </div>
+                                <div class="report-stat-card">
+                                    <div class="report-stat-info">
+                                        <span>Penalties Recorded</span>
+                                        <strong id="reportPenaltyTotal">₱0.00</strong>
+                                        <small>PHP 10 per late day</small>
+                                    </div>
+                                    <div class="report-stat-icon icon-penalty"><i data-lucide="banknote"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="report-table-panel">
+                                <div class="report-table-header">
+                                    <div>
+                                        <h3 id="reportListTitle">Borrow and Return Records</h3>
+                                        <p id="reportListDate">—</p>
+                                    </div>
+                                    <span class="report-list-count" id="reportListCount">0 transactions</span>
+                                </div>
+                                <div class="report-table-wrap">
+                                    <table class="report-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Transaction ID</th>
+                                                <th>Borrower</th>
+                                                <th>Book Title</th>
+                                                <th>Borrow Date</th>
+                                                <th>Due Date</th>
+                                                <th>Return Date</th>
+                                                <th>Penalty</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="reportTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <p id="reportEmptyState" class="report-empty hidden">No borrow or return transactions on the selected date.</p>
+                                <div class="report-table-footer">
+                                    <span id="reportFooterSummary">Showing 0 transactions</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>

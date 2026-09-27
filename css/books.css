@@ -1,4 +1,5 @@
 .books-table th,.books-table td,.users-table th,.users-table td{white-space:nowrap}
+<<<<<<< HEAD
 
 .book-management-panel{display:flex;flex-direction:column;gap:1.2rem}
 .book-management-header{margin-bottom:0}
@@ -104,3 +105,5 @@
   .books-table-footer{flex-direction:column;align-items:flex-start}
   .book-field-grid{grid-template-columns:1fr}
 }
+=======
+>>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d

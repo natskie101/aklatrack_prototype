@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function refreshBorrowing(){
     if(window.lucide)lucide.createIcons();
     filterBorrowingRows();
@@ -151,3 +152,6 @@ function formatBorrowDate(value){
     const date = new Date(value + 'T00:00:00');
     return isNaN(date.getTime()) ? value : date.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 }
+=======
+function refreshBorrowing(){if(window.lucide)lucide.createIcons();}
+>>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d

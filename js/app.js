@@ -1,0 +1,1 @@
+let dashboardPieChartInstance=null;let circulationBarChartInstance=null;let deptDonutChartInstance=null;window.addEventListener('load',()=>{if(window.lucide)lucide.createIcons();if(typeof renderDashboardChart==='function')renderDashboardChart();});

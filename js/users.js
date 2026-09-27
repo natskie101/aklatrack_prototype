@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 function filterUsersTable(value, roleFilter = 'All', statusFilter = 'All') {
     const searchValue = String(value || '').trim().toLowerCase();
     const selectedRole = String(roleFilter || 'All').trim();
@@ -16,6 +15,3 @@ function filterUsersTable(value, roleFilter = 'All', statusFilter = 'All') {
         row.style.display = matchesSearch && matchesRole && matchesStatus ? '' : 'none';
     });
 }
-=======
-function filterUsersTable(value){value=value.toLowerCase();document.querySelectorAll('#usersTableBody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(value)?'':'none');}
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d

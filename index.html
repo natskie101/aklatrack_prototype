@@ -30,7 +30,6 @@
 
 <body>
     <section id="loginScreen" class="login-bg min-h-screen flex items-center justify-center p-6">
-<<<<<<< HEAD
         <div class="login-panel">
             <div class="login-brand">
                 <div class="brand-mark">
@@ -66,31 +65,6 @@
                     LOG IN
                 </button>
             </form>
-=======
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
-            <div class="text-center mb-8">
-                <div class="mx-auto mb-4 w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
-                    <i data-lucide="library-big" class="w-8 h-8"></i>
-                </div>
-                <h1 class="text-3xl font-bold text-slate-800">AKLATRACK</h1>
-                <p class="text-slate-500 mt-1">Library Borrowing Management System</p>
-            </div>
-
-            <form onsubmit="handleLogin(event)" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Username</label>
-                    <input id="username" type="text" required class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
-                    <input id="password" type="password" required class="w-full px-4 py-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold">
-                    Sign In
-                </button>
-            </form>
-            <p class="text-xs text-center text-slate-400 mt-6">Demo: admin / admin123</p>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
         </div>
     </section>
 
@@ -112,13 +86,6 @@
                 <button data-tab="dashboard" onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="layout-dashboard" class="w-5"></i> Dashboard
                 </button>
-<<<<<<< HEAD
-
-=======
-                <button data-tab="users" onclick="switchTab('users')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
-                    <i data-lucide="users" class="w-5"></i> User Management
-                </button>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
                 <button data-tab="books" onclick="switchTab('books')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="book-open" class="w-5"></i> Book Management
                 </button>
@@ -131,21 +98,12 @@
                 <button data-tab="overdue" onclick="switchTab('overdue')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="triangle-alert" class="w-5"></i> Overdue Monitoring
                 </button>
-<<<<<<< HEAD
                 <button data-tab="notifications" onclick="switchTab('notifications')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="bell" class="w-5"></i> Notifications
                 </button>
                 <button data-tab="users" onclick="switchTab('users')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="users" class="w-5"></i> Borrowers
                 </button>
-=======
-                <button data-tab="records" onclick="switchTab('records')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
-                    <i data-lucide="clipboard-list" class="w-5"></i> Borrower Records
-                </button>
-                <button data-tab="notifications" onclick="switchTab('notifications')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
-                    <i data-lucide="bell" class="w-5"></i> Notifications
-                </button>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
                 <button data-tab="reports" onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="bar-chart-3" class="w-5"></i> Reports & Analytics
                 </button>
@@ -212,7 +170,6 @@
                 </section>
 
                 <section id="users" class="page-section hidden">
-<<<<<<< HEAD
                     <div class="user-management-panel">
                         <div class="user-management-header">
                             <div>
@@ -384,28 +341,10 @@
                                 <button>Next</button>
                             </div>
                         </div>
-=======
-                    <div class="section-header">
-                        <div><h2 class="text-2xl font-bold">User Management</h2><p class="text-slate-500">Manage library borrowers.</p></div>
-                        <button onclick="openModal('borrowerModal')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold">Add Borrower</button>
-                    </div>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
-                        <input oninput="filterUsersTable(this.value)" placeholder="Search borrower..." class="w-full md:w-80 px-4 py-3 border rounded-xl mb-5">
-                        <div class="overflow-x-auto">
-                            <table class="users-table w-full text-left">
-                                <thead><tr class="border-b text-sm text-slate-500"><th class="p-3">ID</th><th class="p-3">Name</th><th class="p-3">Type</th><th class="p-3">Contact</th><th class="p-3">Status</th></tr></thead>
-                                <tbody id="usersTableBody">
-                                    <tr><td class="p-3">BR-001</td><td class="p-3">Juan Dela Cruz</td><td class="p-3">Student</td><td class="p-3">0912-345-6789</td><td class="p-3"><span class="badge badge-green">Active</span></td></tr>
-                                    <tr><td class="p-3">BR-002</td><td class="p-3">Maria Santos</td><td class="p-3">Faculty</td><td class="p-3">0917-222-1111</td><td class="p-3"><span class="badge badge-green">Active</span></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
                     </div>
                 </section>
 
                 <section id="books" class="page-section hidden">
-<<<<<<< HEAD
                     <div class="book-management-panel">
                         <div class="book-management-header">
                             <div>
@@ -577,28 +516,10 @@
                                 <button>Next</button>
                             </div>
                         </div>
-=======
-                    <div class="section-header">
-                        <div><h2 class="text-2xl font-bold">Book Management</h2><p class="text-slate-500">Manage library books and availability.</p></div>
-                        <button onclick="openModal('bookModal')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold">Add Book</button>
-                    </div>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
-                        <input oninput="filterBooksTable(this.value)" placeholder="Search book..." class="w-full md:w-80 px-4 py-3 border rounded-xl mb-5">
-                        <div class="overflow-x-auto">
-                            <table class="books-table w-full text-left">
-                                <thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Accession No.</th><th class="p-3">Title</th><th class="p-3">Author</th><th class="p-3">Category</th><th class="p-3">Status</th></tr></thead>
-                                <tbody id="booksTableBody">
-                                    <tr><td class="p-3">BK-0001</td><td class="p-3">Introduction to Computing</td><td class="p-3">John Smith</td><td class="p-3">IT</td><td class="p-3"><span class="badge badge-green">Available</span></td></tr>
-                                    <tr><td class="p-3">BK-0002</td><td class="p-3">Database Systems</td><td class="p-3">Thomas Connolly</td><td class="p-3">IT</td><td class="p-3"><span class="badge badge-blue">Borrowed</span></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
                     </div>
                 </section>
 
                 <section id="borrowing" class="page-section hidden">
-<<<<<<< HEAD
                     <div class="borrowing-shell">
                         <div class="section-header borrowing-header">
                             <div>
@@ -811,25 +732,137 @@
                                 <button class="nav-btn next">Next &gt;</button>
                             </div>
                         </div>
-=======
-                    <div class="section-header"><div><h2 class="text-2xl font-bold">Borrowing Management</h2><p class="text-slate-500">Record and monitor active borrowing transactions.</p></div></div>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
-                        <div class="overflow-x-auto"><table class="borrowing-table w-full text-left">
-                            <thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Transaction</th><th class="p-3">Borrower</th><th class="p-3">Book</th><th class="p-3">Borrow Date</th><th class="p-3">Due Date</th><th class="p-3">Status</th></tr></thead>
-                            <tbody><tr><td class="p-3">TR-1001</td><td class="p-3">Juan Dela Cruz</td><td class="p-3">Database Systems</td><td class="p-3">09/20/2026</td><td class="p-3">09/27/2026</td><td class="p-3"><span class="badge badge-blue">Active</span></td></tr></tbody>
-                        </table></div>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
                     </div>
                 </section>
 
                 <section id="returns" class="page-section hidden">
-                    <div class="section-header"><div><h2 class="text-2xl font-bold">Return Book</h2><p class="text-slate-500">Process returned library materials.</p></div></div>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6 max-w-2xl">
-                        <form onsubmit="processReturnSubmit(event)" class="space-y-4">
-                            <input id="returnTransaction" required placeholder="Transaction ID" class="w-full px-4 py-3 border rounded-xl">
-                            <input id="returnBook" required placeholder="Book / Accession Number" class="w-full px-4 py-3 border rounded-xl">
-                            <button class="bg-blue-600 text-white px-5 py-3 rounded-xl font-semibold">Process Return</button>
-                        </form>
+                    <div class="returns-shell">
+                        <div class="section-header returns-header">
+                            <div>
+                                <h2>Return Book</h2>
+                                <p>Process book returns and manage return records.</p>
+                            </div>
+                        </div>
+
+                        <div class="returns-stats-row">
+                            <div class="returns-stat-card card-green">
+                                <div class="stat-icon"><i data-lucide="circle-check"></i></div>
+                                <div class="stat-details">
+                                    <span>Books Returned Today</span>
+                                    <strong id="returnsTodayCount">42</strong>
+                                </div>
+                            </div>
+                            <div class="returns-stat-card card-gold">
+                                <div class="stat-icon"><i data-lucide="clock"></i></div>
+                                <div class="stat-details">
+                                    <span>Pending Returns</span>
+                                    <strong id="returnsPendingCount">18</strong>
+                                </div>
+                            </div>
+                            <div class="returns-stat-card card-red">
+                                <div class="stat-icon"><i data-lucide="triangle-alert"></i></div>
+                                <div class="stat-details">
+                                    <span>Overdue Returns</span>
+                                    <strong id="returnsOverdueCount">8</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="returns-workspace">
+                            <div class="return-process-card">
+                                <h3>Process Return Transaction</h3>
+                                <form id="returnForm" class="return-form" onsubmit="processReturnSubmit(event)">
+                                    <div class="return-field-group">
+                                        <label for="returnTransaction">Scan or Enter Borrow ID / ISBN</label>
+                                        <div class="return-input-wrap">
+                                            <span class="return-input-icon"><i data-lucide="search"></i></span>
+                                            <input id="returnTransaction" type="text" autocomplete="off" placeholder="TX-9402" oninput="handleReturnLookup()">
+                                        </div>
+                                    </div>
+                                    <div class="return-field-group">
+                                        <label for="returnBorrowerName">Borrower Name Lookup</label>
+                                        <input id="returnBorrowerName" type="text" readonly placeholder="Auto-filled after scanning a record">
+                                    </div>
+                                    <button id="completeReturnBtn" type="submit" class="complete-return-btn">
+                                        <i data-lucide="circle-check"></i> Complete Return Processing
+                                    </button>
+                                    <p id="returnFormMessage" class="return-form-message" role="status" aria-live="polite"></p>
+                                </form>
+                            </div>
+
+                            <div class="scanned-book-card">
+                                <div class="scanned-book-header">
+                                    <h3>Scanned Book Details</h3>
+                                    <span id="scannedStatusBadge" class="scanned-badge badge-idle">Awaiting scan</span>
+                                </div>
+                                <div class="scanned-detail-list">
+                                    <div class="scanned-detail-row">
+                                        <span>Book Title</span>
+                                        <strong id="scannedBookTitle">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Borrower</span>
+                                        <strong id="scannedBorrower">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Borrow Date</span>
+                                        <strong id="scannedBorrowDate">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Due Date</span>
+                                        <strong id="scannedDueDate">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Return Condition</span>
+                                        <select id="returnCondition" class="return-condition-select">
+                                            <option>Good (No damage)</option>
+                                            <option>Minor Wear</option>
+                                            <option>Torn Cover</option>
+                                            <option>Damaged Spine</option>
+                                            <option>Lost Pages</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="return-records-panel">
+                            <div class="return-records-header">
+                                <div>
+                                    <h3>Recent Return Records</h3>
+                                    <p>Historical list of recently processed returns.</p>
+                                </div>
+                                <div class="return-records-filter">
+                                    <span class="return-filter-icon"><i data-lucide="filter"></i></span>
+                                    <select id="returnConditionFilter" onchange="filterReturnRecords()">
+                                        <option value="all">All Conditions</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Minor Wear">Minor Wear</option>
+                                        <option value="Torn Cover">Torn Cover</option>
+                                        <option value="Damaged Spine">Damaged Spine</option>
+                                        <option value="Lost Pages">Lost Pages</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="return-records-table-wrap">
+                                <table class="return-records-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Return ID</th>
+                                            <th>Borrower</th>
+                                            <th>Book Title</th>
+                                            <th>Borrowed</th>
+                                            <th>Due Date</th>
+                                            <th>Returned Date</th>
+                                            <th>Condition</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="returnRecordsBody"></tbody>
+                                </table>
+                            </div>
+                            <p id="returnRecordsEmpty" class="return-records-empty hidden">No return records match the selected condition.</p>
+                        </div>
                     </div>
                 </section>
 
@@ -838,14 +871,6 @@
                     <div class="bg-white rounded-2xl border border-slate-200 p-6"><table class="w-full text-left"><thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Borrower</th><th class="p-3">Book</th><th class="p-3">Due Date</th><th class="p-3">Days Overdue</th></tr></thead><tbody><tr class="overdue-row"><td class="p-3">Maria Santos</td><td class="p-3">Web Development Basics</td><td class="p-3">09/18/2026</td><td class="p-3 text-red-600 font-semibold">8 days</td></tr></tbody></table></div>
                 </section>
 
-<<<<<<< HEAD
-=======
-                <section id="records" class="page-section hidden">
-                    <div class="section-header"><div><h2 class="text-2xl font-bold">Borrower Records</h2><p class="text-slate-500">View borrowing history.</p></div></div>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6"><table class="w-full text-left"><thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Borrower</th><th class="p-3">Total Borrowed</th><th class="p-3">Returned</th><th class="p-3">Overdue</th></tr></thead><tbody><tr class="record-row"><td class="p-3">Juan Dela Cruz</td><td class="p-3">25</td><td class="p-3">24</td><td class="p-3">1</td></tr></tbody></table></div>
-                </section>
-
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
                 <section id="notifications" class="page-section hidden">
                     <div class="section-header"><div><h2 class="text-2xl font-bold">Notifications</h2><p class="text-slate-500">Library reminders and notices.</p></div></div>
                     <div class="space-y-3">
@@ -868,7 +893,6 @@
     </div>
 
     <div id="borrowerModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
-<<<<<<< HEAD
         <div class="borrower-modal modal-content bg-white rounded-2xl w-full max-w-2xl p-0 overflow-hidden">
             <div class="borrower-modal-header">
                 <button class="close-btn" type="button" onclick="closeModal('borrowerModal')"><i data-lucide="x"></i></button>
@@ -906,6 +930,13 @@
                         <label for="borrowerEmail">Email Address <span>*</span></label>
                         <input id="borrowerEmail" type="email" required>
                     </div>
+                    <div class="field-group">
+                        <label for="borrowerCellphone">Cellphone Number <span>*</span></label>
+                        <input id="borrowerCellphone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="09XX XXX XXXX" pattern="09[0-9]{9}" maxlength="11" required>
+                    </div>
+                </div>
+
+                <div class="field-grid two-col">
                     <div class="field-group">
                         <label for="borrowerDepartment">Department / Program <span>*</span></label>
                         <select id="borrowerDepartment" required>
@@ -1033,21 +1064,11 @@
                     <button type="button" class="cancel-btn" onclick="closeModal('borrowCheckoutModal')">Cancel</button>
                     <button type="submit" class="save-btn">Confirm Checkout</button>
                 </div>
-=======
-        <div class="modal-content bg-white rounded-2xl w-full max-w-lg p-6">
-            <div class="flex justify-between items-center mb-5"><h3 class="text-xl font-bold">Add Borrower</h3><button onclick="closeModal('borrowerModal')"><i data-lucide="x"></i></button></div>
-            <form onsubmit="handleAddBorrower(event)" class="space-y-4">
-                <input id="borrowerName" required placeholder="Full Name" class="w-full px-4 py-3 border rounded-xl">
-                <input id="borrowerContact" required placeholder="Contact Number" class="w-full px-4 py-3 border rounded-xl">
-                <select id="borrowerType" class="w-full px-4 py-3 border rounded-xl"><option>Student</option><option>Faculty</option><option>Staff</option></select>
-                <div class="flex justify-end gap-3"><button type="button" onclick="closeModal('borrowerModal')" class="px-4 py-2 rounded-xl border">Cancel</button><button class="px-4 py-2 rounded-xl bg-blue-600 text-white">Save Borrower</button></div>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
             </form>
         </div>
     </div>
 
     <div id="bookModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
-<<<<<<< HEAD
         <div class="book-modal-card">
             <div class="book-modal-header">
                 <h3>Add New Book</h3>
@@ -1113,20 +1134,10 @@
                     <button type="button" class="book-cancel-btn" onclick="closeModal('bookModal')">Back</button>
                     <button type="submit" class="book-save-btn">Save Book</button>
                 </div>
-=======
-        <div class="modal-content bg-white rounded-2xl w-full max-w-lg p-6">
-            <div class="flex justify-between items-center mb-5"><h3 class="text-xl font-bold">Add Book</h3><button onclick="closeModal('bookModal')"><i data-lucide="x"></i></button></div>
-            <form onsubmit="handleAddBook(event)" class="space-y-4">
-                <input id="bookTitle" required placeholder="Book Title" class="w-full px-4 py-3 border rounded-xl">
-                <input id="bookAuthor" required placeholder="Author" class="w-full px-4 py-3 border rounded-xl">
-                <input id="bookCategory" required placeholder="Category" class="w-full px-4 py-3 border rounded-xl">
-                <div class="flex justify-end gap-3"><button type="button" onclick="closeModal('bookModal')" class="px-4 py-2 rounded-xl border">Cancel</button><button class="px-4 py-2 rounded-xl bg-blue-600 text-white">Save Book</button></div>
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
             </form>
         </div>
     </div>
 
-<<<<<<< HEAD
     <div id="bookInventoryModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
         <div class="book-inventory-modal-card">
             <div class="book-modal-header">
@@ -1216,8 +1227,6 @@
         </div>
     </div>
 
-=======
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d
     <script src="js/app.js"></script>
     <script src="js/login.js"></script>
     <script src="js/navigation.js"></script>

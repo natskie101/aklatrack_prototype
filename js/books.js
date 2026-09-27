@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 function filterBooksTable(value, categoryFilter = 'Category: All', statusFilter = 'Status: All') {
     const searchValue = String(value || '').trim().toLowerCase();
     const selectedCategory = String(categoryFilter || 'Category: All').replace('Category: ', '').trim();
@@ -16,6 +15,3 @@ function filterBooksTable(value, categoryFilter = 'Category: All', statusFilter 
         row.style.display = matchesSearch && matchesCategory && matchesStatus ? '' : 'none';
     });
 }
-=======
-function filterBooksTable(value){value=value.toLowerCase();document.querySelectorAll('#booksTableBody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(value)?'':'none');}
->>>>>>> dea7d19fa916acf3b8cc95162ae059e3cfdf773d

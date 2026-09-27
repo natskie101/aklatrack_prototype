@@ -98,8 +98,8 @@ const REPORT_BOOK_POOL = [
     'Software Engineering: A Practitioner Approach', 'Fundamentals of Physics', 'Philippine Constitutional Law'
 ];
 
-const REPORT_BORROW_PLAN = [6, 5, 4, 5]; // day offsets 0, -1, -2, -3
-const REPORT_RETURN_PLAN = [5, 4, 3, 4];
+const REPORT_BORROW_PLAN = [6, 5, 4, 5, 4, 3]; // day offsets 0, -1, -2, -3, -4, -5 (6-day circulation chart)
+const REPORT_RETURN_PLAN = [5, 4, 3, 4, 3, 3];
 const REPORT_RETURN_LATE_POOL = [0, 2, 0, 5, 1, 3, 0, 4, 0, 6, 2, 0, 7, 1, 0, 3];
 const REPORT_CONDITION_POOL = ['Good', 'Good', 'Minor Wear', 'Torn Cover', 'Good', 'Damaged Spine', 'Good', 'Minor Wear'];
 

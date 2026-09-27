@@ -412,9 +412,17 @@ function sendBulkReminders(){
     if(scheduled){
         const scheduledDate = formatOverdueDate(new Date(scheduleValue + 'T00:00:00'));
         showOverdueMessage(targets.length + ' ' + (targets.length === 1 ? 'reminder' : 'reminders') + ' (' + channels.join(' + ') + ') scheduled for ' + scheduledDate + '.','success');
+        if (typeof pushNotification === 'function') {
+            pushNotification('reminder', 'Reminders Scheduled',
+                targets.length + ' ' + channels.join(' + ') + ' reminder(s) scheduled for ' + scheduledDate + '.');
+        }
     } else {
         targets.filter((record) => record.noticeStatus === 'Pending').forEach((record) => { record.noticeStatus = 'Notice Sent'; });
         showOverdueMessage(targets.length + ' ' + (targets.length === 1 ? 'reminder' : 'reminders') + ' sent via ' + channels.join(' + ') + ' • ' + targets.length + ' ' + (targets.length === 1 ? 'borrower' : 'borrowers') + ' notified.','success');
+        if (typeof pushNotification === 'function') {
+            pushNotification('reminder', 'Bulk Reminders Sent',
+                targets.length + ' ' + channels.join(' + ') + ' reminder(s) dispatched for the selected recipient group.');
+        }
     }
 
     closeModal('bulkRemindersModal');

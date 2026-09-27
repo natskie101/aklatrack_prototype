@@ -316,6 +316,10 @@ function processReturnSubmit(event){
         `Return ${processedRecord.returnId} completed for ${processedRecord.borrower} - ${getReturnStatusLabel(condition)}.`,
         'success'
     );
+    if (typeof pushNotification === 'function') {
+        pushNotification('return', 'Return Completed',
+            `${processedRecord.returnId} for ${processedRecord.borrower} (${processedRecord.bookTitle}) - condition: ${condition}.`);
+    }
     if(window.lucide) lucide.createIcons();
 }
 

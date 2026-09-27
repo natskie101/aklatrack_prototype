@@ -144,6 +144,10 @@ function submitBorrowCheckout(event){
     closeModal('borrowCheckoutModal');
     event.target.reset();
     filterBorrowingRows();
+    if (typeof pushNotification === 'function') {
+        pushNotification('borrow', 'New Borrow Recorded',
+            `${nextId} - ${borrowerName} borrowed "${bookTitle}" (due ${formatBorrowDate(dueDateValue)}).`);
+    }
 }
 
 function formatBorrowDate(value){

@@ -32,11 +32,8 @@
     <section id="loginScreen" class="login-bg min-h-screen flex items-center justify-center p-6">
         <div class="login-panel">
             <div class="login-brand">
-                <div class="brand-mark">
-                    <i data-lucide="library-big" class="brand-icon"></i>
-                </div>
-                <h1>AKLATRACK</h1>
-                <p>Library Borrowing Management System</p>
+                <img class="brand-image brand-image-login" src="LOGO/ALKATRACK.png" alt="ALKATRACK logo">
+                
             </div>
 
             <form onsubmit="handleLogin(event)" class="login-form">
@@ -72,12 +69,9 @@
         <aside class="sidebar fixed inset-y-0 left-0 w-64 bg-slate-900 text-white z-40">
             <div class="px-6 py-6 border-b border-slate-800">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
-                        <i data-lucide="library-big"></i>
-                    </div>
+                    
                     <div>
-                        <h2 class="font-bold">AKLATRACK</h2>
-                        <p class="text-xs text-slate-400">Library System</p>
+                        <img class="brand-image brand-image-login" src="LOGO/123.jpg" alt="ALKATRACK logo">
                     </div>
                 </div>
             </div>
@@ -100,6 +94,7 @@
                 </button>
                 <button data-tab="notifications" onclick="switchTab('notifications')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="bell" class="w-5"></i> Notifications
+                    <span id="navNotificationsBadge" class="nav-notifications-badge hidden">0</span>
                 </button>
                 <button data-tab="users" onclick="switchTab('users')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="users" class="w-5"></i> Borrowers
@@ -107,13 +102,14 @@
                 <button data-tab="reports" onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
                     <i data-lucide="file-text" class="w-5"></i> Reports
                 </button>
-            </nav>
-
-            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+             
+           
+            
                 <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-left">
                     <i data-lucide="log-out" class="w-5"></i> Logout
                 </button>
-            </div>
+             </nav>
+
         </aside>
 
         <main class="ml-64 min-h-screen">
@@ -141,29 +137,35 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
                         <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
                             <p class="text-sm text-slate-500">Total Books</p>
-                            <h3 class="text-3xl font-bold text-slate-800 mt-2">1,248</h3>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-2" id="dashboardTotalBooks">2,486</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardTotalBooksNote">124 titles in catalog</p>
                         </div>
                         <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
                             <p class="text-sm text-slate-500">Borrowed Books</p>
-                            <h3 class="text-3xl font-bold text-blue-600 mt-2">184</h3>
+                            <h3 class="text-3xl font-bold text-blue-600 mt-2" id="dashboardBorrowedBooks">24</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardBorrowedBooksNote">Copies issued to borrowers</p>
                         </div>
                         <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
                             <p class="text-sm text-slate-500">Overdue</p>
-                            <h3 class="text-3xl font-bold text-red-600 mt-2">27</h3>
+                            <h3 class="text-3xl font-bold text-red-600 mt-2" id="dashboardOverdue">48</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardOverdueNote">12 critical (30+ days)</p>
                         </div>
                         <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
                             <p class="text-sm text-slate-500">Registered Users</p>
-                            <h3 class="text-3xl font-bold text-emerald-600 mt-2">612</h3>
+                            <h3 class="text-3xl font-bold text-emerald-600 mt-2" id="dashboardUsers">8</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardUsersNote">7 active · 1 suspended</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                         <div class="bg-white rounded-2xl border border-slate-200 p-6">
-                            <h3 class="font-bold text-slate-800 mb-4">Book Circulation</h3>
+                            <h3 class="font-bold text-slate-800 mb-1">Book Circulation <span class="text-sm font-normal text-slate-400">Last 6 days</span></h3>
+                            <p class="text-xs text-slate-400 mb-4">Borrows and returns recorded per day</p>
                             <canvas id="circulationChart"></canvas>
                         </div>
                         <div class="bg-white rounded-2xl border border-slate-200 p-6">
-                            <h3 class="font-bold text-slate-800 mb-4">Book Status</h3>
+                            <h3 class="font-bold text-slate-800 mb-1">Book Status <span class="text-sm font-normal text-slate-400">Live inventory</span></h3>
+                            <p class="text-xs text-slate-400 mb-4">Available, borrowed and overdue copies</p>
                             <canvas id="statusChart"></canvas>
                         </div>
                     </div>
@@ -963,10 +965,25 @@
                 </section>
 
                 <section id="notifications" class="page-section hidden">
-                    <div class="section-header"><div><h2 class="text-2xl font-bold">Notifications</h2><p class="text-slate-500">Library reminders and notices.</p></div></div>
-                    <div class="space-y-3">
-                        <div class="notification-item bg-white border rounded-2xl p-5"><b>Overdue Reminder</b><p class="text-sm text-slate-500 mt-1">Maria Santos has an overdue book.</p></div>
-                        <div class="notification-item bg-white border rounded-2xl p-5"><b>Return Due</b><p class="text-sm text-slate-500 mt-1">A borrowed book is due tomorrow.</p></div>
+                    <div class="notifications-shell">
+                        <div class="section-header notifications-header">
+                            <div>
+                                <h2>Notifications</h2>
+                                <p>Library reminders, overdue alerts and system notices.</p>
+                            </div>
+                            <div class="notifications-actions">
+                                <span class="notifications-unread" id="notificationsUnread">0 unread</span>
+                                <button type="button" class="notifications-read-btn" onclick="markNotificationsRead()">
+                                    <i data-lucide="check-check"></i> Mark all as read
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="notifications-list" id="notificationsList"></div>
+                        <div class="notifications-empty hidden" id="notificationsEmpty">
+                            <i data-lucide="bell-off"></i>
+                            <p>No notifications right now.</p>
+                        </div>
                     </div>
                 </section>
 

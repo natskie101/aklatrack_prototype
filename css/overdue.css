@@ -1,1 +1,79 @@
-.overdue-row{background:#fff7ed}.overdue-row:hover{background:#ffedd5}
+.overdue-shell{max-width:100%}
+.overdue-header{margin-bottom:18px}
+.overdue-header h2{margin:0;font-size:2.1rem;font-weight:800;letter-spacing:-.04em;color:#1f2937}
+.overdue-header p{margin-top:6px;font-size:1rem;color:#64748b}
+
+.overdue-stats-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:18px}
+.overdue-stat-card{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px 20px;min-height:104px}
+.overdue-stat-info{display:flex;flex-direction:column;gap:6px;min-width:0}
+.overdue-stat-info>span{font-size:.8rem;font-weight:600;color:#64748b}
+.overdue-stat-info>strong{font-size:1.75rem;line-height:1.1;font-weight:800;color:#1f2937;letter-spacing:-.02em}
+.overdue-stat-info>small{font-size:.76rem;color:#94a3b8}
+.overdue-stat-icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;flex:0 0 auto}
+.overdue-stat-icon svg,.overdue-stat-icon i{width:20px;height:20px}
+.overdue-stat-icon.plain{background:transparent;color:#2563eb}
+.overdue-stat-icon.icon-critical{background:#fff1f2;color:#ef4444}
+.overdue-stat-icon.icon-notice{background:#fff7ed;color:#d97706}
+
+.overdue-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.overdue-segmented{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.overdue-seg{height:36px;padding:0 14px;border:1px solid #dfe7f1;background:#fff;color:#475569;border-radius:9px;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.overdue-seg:hover{background:#f8fafc}
+.overdue-seg.active{background:#2563eb;border-color:#2563eb;color:#fff;box-shadow:0 6px 14px rgba(37,99,235,.18)}
+.overdue-toolbar-actions{display:flex;align-items:center;gap:10px}
+.overdue-more-filters-btn,.overdue-reminders-btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:9px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.overdue-more-filters-btn{border:1px solid #dfe7f1;background:#fff;color:#475569}
+.overdue-more-filters-btn:hover{background:#f8fafc}
+.overdue-reminders-btn{border:none;background:#2563eb;color:#fff;box-shadow:0 8px 18px rgba(37,99,235,.2)}
+.overdue-reminders-btn:hover{background:#1d4ed8}
+.overdue-more-filters-btn svg,.overdue-reminders-btn svg{width:16px;height:16px}
+
+.overdue-more-filters{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px;margin-bottom:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}
+.overdue-more-filters.hidden{display:none}
+.overdue-search-wrap{position:relative;display:flex;align-items:center;flex:1 1 280px;min-width:220px}
+.overdue-search-wrap input{width:100%;height:38px;border:1px solid #dfe7f1;border-radius:9px;background:#fff;padding:0 14px 0 38px;font-size:.86rem;color:#334155;outline:none}
+.overdue-search-wrap input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.12)}
+.overdue-search-icon{position:absolute;left:12px;display:inline-flex;color:#94a3b8;pointer-events:none}
+.overdue-search-icon svg{width:15px;height:15px}
+.overdue-select{height:38px;border:1px solid #dfe7f1;border-radius:9px;background:#fff;color:#334155;font-size:.86rem;font-weight:600;padding:0 12px;outline:none;cursor:pointer}
+.overdue-reset-btn{height:38px;padding:0 14px;border:1px solid #dfe7f1;border-radius:9px;background:#fff;color:#475569;font-size:.82rem;font-weight:700;cursor:pointer}
+.overdue-reset-btn:hover{background:#f1f5f9}
+.overdue-message{min-height:18px;margin:0 0 12px;font-size:.84rem;font-weight:600}
+.overdue-message.is-success{color:#15803d}
+.overdue-message.is-error{color:#b45309}
+
+.overdue-table-panel{background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden}
+.overdue-table-wrap{overflow-x:auto}
+.overdue-table{width:100%;border-collapse:collapse}
+.overdue-table thead th{padding:13px 15px;background:#fff;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-align:left;white-space:nowrap}
+.overdue-table tbody td{padding:14px 15px;border-bottom:1px solid #eef2f7;font-size:.88rem;color:#334155;vertical-align:middle;white-space:nowrap}
+.overdue-book-cell{max-width:250px;overflow:hidden;text-overflow:ellipsis}
+.overdue-table tbody tr:last-child td{border-bottom:none}
+.overdue-table tbody tr:hover{background:#f8fafc}
+.overdue-id{font-weight:700;color:#1f2937}
+.overdue-days-cell{display:inline-flex;align-items:center;gap:8px}
+.overdue-days{font-weight:700;color:#1f2937}
+.overdue-critical-tag{padding:2px 6px;border-radius:6px;border:1px solid #fecaca;background:#fee2e2;color:#b91c1c;font-size:.62rem;font-weight:800;letter-spacing:.08em}
+.overdue-penalty{font-weight:700;color:#0f172a}
+.overdue-empty{padding:22px 18px!important;color:#64748b;font-weight:600}
+.overdue-notice-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:.74rem;font-weight:700;border:1px solid transparent}
+.overdue-notice-pill svg,.overdue-notice-pill i{width:13px;height:13px}
+.overdue-notice-pill.escalated{background:#fee2e2;color:#b91c1c;border-color:#fecaca}
+.overdue-notice-pill.notice-sent{background:#e0f2fe;color:#0369a1;border-color:#bae6fd}
+.overdue-notice-pill.pending{background:#fef3c7;color:#b45309;border-color:#fcd34d}
+.overdue-notice-pill.resolved{background:#dcfce7;color:#15803d;border-color:#bbf7d0}
+
+.overdue-panel-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid #eef2f7;color:#64748b;font-size:.84rem}
+.overdue-pagination{display:flex;align-items:center;gap:6px}
+.overdue-page-btn{height:32px;min-width:32px;padding:0 10px;border:1px solid #dfe7f1;background:#fff;border-radius:8px;color:#475569;font-size:.82rem;font-weight:600;cursor:pointer}
+.overdue-page-btn:hover:not(:disabled):not(.active){background:#f8fafc}
+.overdue-page-btn.active{background:#2563eb;border-color:#2563eb;color:#fff}
+.overdue-page-btn:disabled{color:#cbd5e1;cursor:not-allowed}
+.overdue-page-ellipsis{padding:0 2px;color:#94a3b8}
+
+/* legacy row styling kept for older markup */
+.overdue-row{background:#fff7ed}
+.overdue-row:hover{background:#ffedd5}
+
+@media(max-width:1024px){.overdue-stats-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:768px){.overdue-header h2{font-size:1.7rem}.overdue-stats-row{grid-template-columns:1fr}.overdue-toolbar{flex-direction:column;align-items:stretch}.overdue-toolbar-actions{flex-wrap:wrap}.overdue-table{min-width:980px}.overdue-panel-footer{flex-direction:column;align-items:flex-start}}

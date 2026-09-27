@@ -867,8 +867,99 @@
                 </section>
 
                 <section id="overdue" class="page-section hidden">
-                    <div class="section-header"><div><h2 class="text-2xl font-bold">Overdue Monitoring</h2><p class="text-slate-500">Monitor overdue borrowed books.</p></div><button onclick="triggerBulkReminders()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold">Send Reminders</button></div>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6"><table class="w-full text-left"><thead><tr class="border-b text-sm text-slate-500"><th class="p-3">Borrower</th><th class="p-3">Book</th><th class="p-3">Due Date</th><th class="p-3">Days Overdue</th></tr></thead><tbody><tr class="overdue-row"><td class="p-3">Maria Santos</td><td class="p-3">Web Development Basics</td><td class="p-3">09/18/2026</td><td class="p-3 text-red-600 font-semibold">8 days</td></tr></tbody></table></div>
+                    <div class="overdue-shell">
+                        <div class="section-header overdue-header">
+                            <div>
+                                <h2>Overdue Monitoring</h2>
+                                <p>Track overdue books, manage penalty collection, and send reminders to borrowers.</p>
+                            </div>
+                        </div>
+
+                        <div class="overdue-stats-row">
+                            <div class="overdue-stat-card">
+                                <div class="overdue-stat-info">
+                                    <span>Total Overdue</span>
+                                    <strong><span id="overdueTotalCount">48</span> Books</strong>
+                                    <small>4 books since yesterday</small>
+                                </div>
+                                <div class="overdue-stat-icon plain"><i data-lucide="book-open"></i></div>
+                            </div>
+                            <div class="overdue-stat-card">
+                                <div class="overdue-stat-info">
+                                    <span>Critically Overdue (30+ days)</span>
+                                    <strong><span id="overdueCriticalCount">12</span> Books</strong>
+                                    <small>Requires immediate legal notice</small>
+                                </div>
+                                <div class="overdue-stat-icon icon-critical"><i data-lucide="triangle-alert"></i></div>
+                            </div>
+                            <div class="overdue-stat-card">
+                                <div class="overdue-stat-info">
+                                    <span>Pending Notices</span>
+                                    <strong><span id="overduePendingNoticeCount">8</span> Notices</strong>
+                                    <small>Queue waiting for approval</small>
+                                </div>
+                                <div class="overdue-stat-icon icon-notice"><i data-lucide="bell-ring"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="overdue-toolbar">
+                            <div class="overdue-segmented" id="overdueBucketFilters">
+                                <button type="button" class="overdue-seg active" data-bucket="all" onclick="setOverdueBucket('all', this)">All Records</button>
+                                <button type="button" class="overdue-seg" data-bucket="1-7" onclick="setOverdueBucket('1-7', this)">1-7 Days Overdue</button>
+                                <button type="button" class="overdue-seg" data-bucket="8-30" onclick="setOverdueBucket('8-30', this)">8-30 Days Overdue</button>
+                                <button type="button" class="overdue-seg" data-bucket="30+" onclick="setOverdueBucket('30+', this)">30+ Days (Critical)</button>
+                            </div>
+                            <div class="overdue-toolbar-actions">
+                                <button type="button" class="overdue-more-filters-btn" onclick="toggleOverdueMoreFilters()">
+                                    <i data-lucide="sliders-horizontal"></i> More Filters
+                                </button>
+                                <button type="button" class="overdue-reminders-btn" onclick="triggerBulkReminders()">
+                                    <i data-lucide="send"></i> Send Bulk Reminders
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="overdue-more-filters hidden" id="overdueMoreFilters">
+                            <div class="overdue-search-wrap">
+                                <span class="overdue-search-icon"><i data-lucide="search"></i></span>
+                                <input id="overdueSearchInput" type="text" placeholder="Search borrow ID, borrower or book title..." oninput="applyOverdueFilters()">
+                            </div>
+                            <select id="overdueNoticeFilter" class="overdue-select" onchange="applyOverdueFilters()">
+                                <option value="all">Notice Status: All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Notice Sent">Notice Sent</option>
+                                <option value="Escalated">Escalated</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                            <button type="button" class="overdue-reset-btn" onclick="resetOverdueFilters()">Clear Filters</button>
+                        </div>
+
+                        <p id="overdueNoticeMessage" class="overdue-message" role="status" aria-live="polite"></p>
+
+                        <div class="overdue-table-panel">
+                            <div class="overdue-table-wrap">
+                                <table class="overdue-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Borrow ID</th>
+                                            <th>Borrower Name</th>
+                                            <th>Book Title</th>
+                                            <th>Borrow Date</th>
+                                            <th>Due Date</th>
+                                            <th>Days Overdue</th>
+                                            <th>Penalty (PHP 10/day)</th>
+                                            <th>Notice Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overdueTableBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="overdue-panel-footer">
+                                <span id="overdueFooterSummary">Showing 0 of 0 overdue records</span>
+                                <div class="overdue-pagination" id="overduePagination"></div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <section id="notifications" class="page-section hidden">

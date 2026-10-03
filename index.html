@@ -1375,7 +1375,7 @@
                 </div>
 
                 <div class="book-copy-actions">
-                    <button type="button" class="book-action-btn primary" onclick="addInventoryCopyRow()">+ Add New Physical Copy</button>
+                    <button type="button" class="book-action-btn primary" onclick="openInventoryCopyModal()">+ Add New Physical Copy</button>
                 </div>
 
                 <div class="book-copy-table-wrap">
@@ -1397,6 +1397,35 @@
                     <button type="button" class="book-save-btn" onclick="closeModal('bookInventoryModal')">Save Changes</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="inventoryCopyModal" class="modal-backdrop copy-modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="book-modal-card copy-modal-card" role="dialog" aria-modal="true" aria-labelledby="inventoryCopyModalTitle">
+            <div class="book-modal-header">
+                <h3 id="inventoryCopyModalTitle">Add Physical Copy</h3>
+                <button type="button" class="book-modal-close" aria-label="Close" onclick="closeModal('inventoryCopyModal')"><i data-lucide="x"></i></button>
+            </div>
+            <form class="book-modal-form" onsubmit="saveInventoryCopy(event)">
+                <div class="book-field-grid">
+                    <div class="book-field-group">
+                        <label for="inventoryCopyCondition">Condition</label>
+                        <select id="inventoryCopyCondition" required>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Damaged">Damaged</option>
+                        </select>
+                    </div>
+                    <div class="book-field-group">
+                        <label for="inventoryCopyLocation">Location</label>
+                        <input id="inventoryCopyLocation" type="text" required placeholder="e.g. Shelf A-12">
+                    </div>
+                </div>
+                <div class="book-modal-actions">
+                    <button type="button" class="book-cancel-btn" onclick="closeModal('inventoryCopyModal')">Cancel</button>
+                    <button type="submit" class="book-save-btn">Add Copy</button>
+                </div>
+            </form>
         </div>
     </div>
 

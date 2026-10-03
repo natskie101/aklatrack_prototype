@@ -39,8 +39,9 @@
 .table-icon-btn.secondary{background:#eef2ff;color:#3659d5;border-color:#c7d2fe}
 .table-icon-btn.danger{background:#dc2626;color:#fff;border-color:#dc2626}
 
-.book-inventory-modal-card{width:min(100%, 780px);background:#fff;border-radius:18px;border:1px solid #dfe7f2;box-shadow:0 18px 45px rgba(15,23,42,.18);overflow:hidden}
-.book-inventory-body{padding:1rem 1.2rem 1.15rem}
+.book-inventory-modal-card{display:flex;flex-direction:column;width:min(100%, 680px);max-height:calc(100vh - 2rem);background:#fff;border-radius:18px;border:1px solid #dfe7f2;box-shadow:0 18px 45px rgba(15,23,42,.18);overflow:hidden}
+.book-inventory-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:1rem 1.2rem 0}
+.book-inventory-body>.book-modal-actions{position:sticky;bottom:0;z-index:1;margin:1rem -1.2rem 0;padding:.8rem 1.2rem 1rem;background:#fff;border-top:1px solid #edf2f7}
 .book-inventory-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-bottom:1rem}
 .book-inventory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem 1rem;margin-bottom:.8rem}
 .book-copy-actions{display:flex;justify-content:flex-end;margin:0 0 .75rem}
@@ -53,7 +54,11 @@
 .copy-status-available{background:#dcfce7;color:#166534}
 .copy-status-borrowed{background:#fee2e2;color:#991b1b}
 .copy-status-damaged{background:#fef3c7;color:#92400e}
+.copy-status-good{background:#dcfce7;color:#166534}
+.copy-status-fair{background:#fef3c7;color:#92400e}
 .copy-remove-btn{border:none;background:#f1f5f9;color:#475569;border-radius:8px;padding:.38rem .6rem;font-size:.72rem;font-weight:700;cursor:pointer}
+.copy-modal-backdrop{z-index:60!important}
+.copy-modal-card{max-width:520px}
 
 .books-table-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.4rem;color:#64748b;font-size:.88rem}
 .books-pagination{display:flex;align-items:center;gap:.35rem}

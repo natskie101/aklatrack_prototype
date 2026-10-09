@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKLATRACK - Library Management System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/users.css">
+    <link rel="stylesheet" href="css/books.css">
+    <link rel="stylesheet" href="css/borrowing.css">
+    <link rel="stylesheet" href="css/returns.css">
+    <link rel="stylesheet" href="css/overdue.css">
+    <link rel="stylesheet" href="css/records.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/reports.css">
+    <link rel="stylesheet" href="css/modals.css">
+</head>
+
+<body>
+    <section id="loginScreen" class="login-bg min-h-screen flex items-center justify-center p-6">
+        <div class="login-panel">
+            <div class="login-brand">
+                <img class="brand-image brand-image-login" src="LOGO/ALKATRACK.png" alt="ALKATRACK logo">
+                
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="login-form">
+                <div class="field-group">
+                    <label for="username">Librarian Username / Staff ID</label>
+                    <div class="input-wrap">
+                        <span class="field-icon"><i data-lucide="user"></i></span>
+                        <input id="username" type="text" value="admin_librarian" required>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <span class="field-icon"><i data-lucide="lock"></i></span>
+                        <input id="password" type="password" value="LibPass2026!" required>
+                    </div>
+                </div>
+
+                <label class="remember-row">
+                    <input type="checkbox" checked>
+                    <span>Keep me logged in for this shift</span>
+                </label>
+
+                <button class="login-btn" type="submit">
+                    LOG IN
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <div id="mainApp" class="hidden min-h-screen bg-slate-50">
+        <aside class="sidebar fixed inset-y-0 left-0 w-64 bg-slate-900 text-white z-40">
+            <div class="px-6 py-6 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    
+                    <div>
+                        <img class="brand-image brand-image-login" src="LOGO/123.jpg" alt="ALKATRACK logo">
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1">
+                <button data-tab="dashboard" onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="layout-dashboard" class="w-5"></i> Dashboard
+                </button>
+                <button data-tab="books" onclick="switchTab('books')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="book-open" class="w-5"></i> Book Management
+                </button>
+                <button data-tab="borrowing" onclick="switchTab('borrowing')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="book-copy" class="w-5"></i> Borrowing
+                </button>
+                <button data-tab="returns" onclick="switchTab('returns')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="rotate-ccw" class="w-5"></i> Return Book
+                </button>
+                <button data-tab="overdue" onclick="switchTab('overdue')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="triangle-alert" class="w-5"></i> Overdue Monitoring
+                </button>
+                <button data-tab="notifications" onclick="switchTab('notifications')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="bell" class="w-5"></i> Notifications
+                    <span id="navNotificationsBadge" class="nav-notifications-badge hidden">0</span>
+                </button>
+                <button data-tab="users" onclick="switchTab('users')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="users" class="w-5"></i> Borrowers
+                </button>
+                <button data-tab="reports" onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">
+                    <i data-lucide="file-text" class="w-5"></i> Reports
+                </button>
+             
+           
+            
+                <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 text-left">
+                    <i data-lucide="log-out" class="w-5"></i> Logout
+                </button>
+             </nav>
+
+        </aside>
+
+        <main class="ml-64 min-h-screen">
+            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-30">
+                <div>
+                    <h1 id="pageTitle" class="font-bold text-slate-800">Dashboard</h1>
+                    <p class="text-xs text-slate-500">Library administration</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-slate-700">Librarian</p>
+                        <p class="text-xs text-slate-400">Administrator</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">L</div>
+                </div>
+            </header>
+
+            <div class="main-content p-8">
+                <section id="dashboard" class="page-section">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">Dashboard</h2>
+                        <p class="text-slate-500">Overview of library activities.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Total Books</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-2" id="dashboardTotalBooks">2,486</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardTotalBooksNote">124 titles in catalog</p>
+                        </div>
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Borrowed Books</p>
+                            <h3 class="text-3xl font-bold text-blue-600 mt-2" id="dashboardBorrowedBooks">24</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardBorrowedBooksNote">Copies issued to borrowers</p>
+                        </div>
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Overdue</p>
+                            <h3 class="text-3xl font-bold text-red-600 mt-2" id="dashboardOverdue">48</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardOverdueNote">12 critical (30+ days)</p>
+                        </div>
+                        <div class="dashboard-card bg-white rounded-2xl p-5 border border-slate-200">
+                            <p class="text-sm text-slate-500">Registered Users</p>
+                            <h3 class="text-3xl font-bold text-emerald-600 mt-2" id="dashboardUsers">8</h3>
+                            <p class="text-xs text-slate-400 mt-1" id="dashboardUsersNote">7 active · 1 suspended</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                            <h3 class="font-bold text-slate-800 mb-1">Book Circulation <span class="text-sm font-normal text-slate-400">Last 6 days</span></h3>
+                            <p class="text-xs text-slate-400 mb-4">Borrows and returns recorded per day</p>
+                            <canvas id="circulationChart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                            <h3 class="font-bold text-slate-800 mb-1">Book Status <span class="text-sm font-normal text-slate-400">Live inventory</span></h3>
+                            <p class="text-xs text-slate-400 mb-4">Available, borrowed and overdue copies</p>
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="users" class="page-section hidden">
+                    <div class="user-management-panel">
+                        <div class="user-management-header">
+                            <div>
+                                <h2>Borrowers</h2>
+                                <p>Manage library members and borrower records.</p>
+                            </div>
+                        </div>
+
+                        <div class="user-stats-grid">
+                            <div class="user-stat-card stat-card-active">
+                                <div class="stat-label">Active Borrowers</div>
+                                <div class="stat-number">7</div>
+                            </div>
+                            <div class="user-stat-card stat-card-muted">
+                                <div class="stat-label">Suspended Borrowers</div>
+                                <div class="stat-number">1</div>
+                            </div>
+                        </div>
+
+                        <div class="user-toolbar">
+                            <div class="toolbar-left">
+                                <input id="userSearchInput" oninput="filterUsersTable(this.value, document.getElementById('userRoleFilter').value, document.getElementById('userStatusFilter').value)" placeholder="Search by name or id..." class="search-input">
+                            </div>
+                            <div class="toolbar-right">
+                                <select id="userRoleFilter" class="filter-select" onchange="filterUsersTable(document.getElementById('userSearchInput').value, this.value, document.getElementById('userStatusFilter').value)">
+                                    <option>All</option>
+                                    <option>Student</option>
+                                    <option>Instructor</option>
+                                    <option>Staff</option>
+                                </select>
+                                <select id="userStatusFilter" class="filter-select" onchange="filterUsersTable(document.getElementById('userSearchInput').value, document.getElementById('userRoleFilter').value, this.value)">
+                                    <option>All</option>
+                                    <option>Active</option>
+                                    <option>Suspended</option>
+                                </select>
+                                <button onclick="openModal('borrowerModal')" class="add-user-btn">+ Add Borrower</button>
+                            </div>
+                        </div>
+
+                        <div class="users-table-wrap">
+                            <table class="users-table w-full text-left">
+                                <thead>
+                                    <tr>
+                                        <th>ID Number</th>
+                                        <th>Full Name</th>
+                                        <th>Roles/Dept</th>
+                                        <th>Borrowed</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>113431</td>
+                                        <td>Ana Reyes</td>
+                                        <td>BS Information Technology<br><span>Student</span></td>
+                                        <td>3 Books<br><span>1 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Ana Reyes')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>114564</td>
+                                        <td>Mark Santos</td>
+                                        <td>BS Information Technology<br><span>Student</span></td>
+                                        <td>3 Books<br><span>2 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Mark Santos')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>114563</td>
+                                        <td>Jessa Lim</td>
+                                        <td>BS Information Technology<br><span>Student</span></td>
+                                        <td>3 Books<br><span>1 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Jessa Lim')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>115832</td>
+                                        <td>Paul Cruz</td>
+                                        <td>BS Information Technology<br><span>Student</span></td>
+                                        <td>3 Books<br><span>2 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Paul Cruz')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>114356</td>
+                                        <td>Mika Flores</td>
+                                        <td>BS Information Technology<br><span>Student</span></td>
+                                        <td>6 Books<br><span>1 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Mika Flores')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Suspended">
+                                        <td>114534</td>
+                                        <td>David Miller</td>
+                                        <td>BS Information Technology<br><span>Student</span></td>
+                                        <td>0 Books<br><span>0 active</span></td>
+                                        <td><span class="status-badge suspended">Suspended</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('David Miller')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>114574</td>
+                                        <td>Elena Petrova</td>
+                                        <td>BS Criminology<br><span>Student</span></td>
+                                        <td>3 Books<br><span>1 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Elena Petrova')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-role="Student" data-status="Active">
+                                        <td>114567</td>
+                                        <td>Robert Chen</td>
+                                        <td>BS Tourism Management<br><span>Student</span></td>
+                                        <td>5 Books<br><span>2 active</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <div class="action-buttons-group">
+                                                <button class="table-action-btn" aria-label="Edit" onclick="openModal('borrowerModal')">✎</button>
+                                                <button class="table-action-btn secondary" aria-label="Borrower Records" onclick="openBorrowerRecordsModal('Robert Chen')">◌</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-pagination">
+                            <span>Showing 1 - 8 of 124 records</span>
+                            <div class="pagination-controls">
+                                <button>Previous</button>
+                                <button class="active">1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button>...</button>
+                                <button>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="books" class="page-section hidden">
+                    <div class="book-management-panel">
+                        <div class="book-management-header">
+                            <div>
+                                <h2>Book Management</h2>
+                                <p>Manage library books, catalog details, ISBN records, and copy availability.</p>
+                            </div>
+                        </div>
+
+                        <div class="books-summary-row">
+                            <div class="book-summary-card">
+                                <span>Total Books</span>
+                                <strong>2486</strong>
+                            </div>
+                            <div class="book-summary-card card-warning">
+                                <span>Out of Stock / Issued</span>
+                                <strong>24</strong>
+                            </div>
+                        </div>
+
+                        <div class="book-toolbar">
+                            <div class="book-toolbar-left">
+                                <input id="bookSearchInput" oninput="filterBooksTable(this.value, document.getElementById('bookCategoryFilter').value, document.getElementById('bookStatusFilter').value)" placeholder="Search by title, author or cat..." class="book-search-input">
+                            </div>
+                            <div class="book-toolbar-right">
+                                <select id="bookCategoryFilter" class="book-filter-select" onchange="filterBooksTable(document.getElementById('bookSearchInput').value, this.value, document.getElementById('bookStatusFilter').value)">
+                                    <option>Category: All</option>
+                                    <option>Technology</option>
+                                    <option>Law</option>
+                                    <option>Tourism</option>
+                                </select>
+                                <select id="bookStatusFilter" class="book-filter-select" onchange="filterBooksTable(document.getElementById('bookSearchInput').value, document.getElementById('bookCategoryFilter').value, this.value)">
+                                    <option>Status: All</option>
+                                    <option>Available</option>
+                                    <option>Not Available</option>
+                                </select>
+                                <button class="book-action-btn primary" onclick="openModal('bookModal')">Add Book</button>
+                            </div>
+                        </div>
+
+                        <div class="books-table-wrap">
+                            <table class="books-table">
+                                <thead>
+                                    <tr>
+                                        <th>Book ID</th>
+                                        <th>Book Title and Author</th>
+                                        <th>Category</th>
+                                        <th>Available Copies</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="booksTableBody">
+                                    <tr data-category="Technology" data-status="Available">
+                                        <td>4215325</td>
+                                        <td><div class="book-title">Database Systems</div><div class="book-author">by Thomas Connolly</div></td>
+                                        <td>Technology</td>
+                                        <td>2 Books<br><span>(4 Total)</span></td>
+                                        <td><span class="book-status-pill status-in-stock">Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Technology" data-status="Available">
+                                        <td>312342</td>
+                                        <td><div class="book-title">Web Development with Node &amp; Express</div><div class="book-author">by Ethan Brown</div></td>
+                                        <td>Technology</td>
+                                        <td>3 Books<br><span>(7 Total)</span></td>
+                                        <td><span class="book-status-pill status-in-stock">Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Technology" data-status="Available">
+                                        <td>512312</td>
+                                        <td><div class="book-title">Computer Networking Basics</div><div class="book-author">by James Kurose</div></td>
+                                        <td>Technology</td>
+                                        <td>4 Books<br><span>(9 Total)</span></td>
+                                        <td><span class="book-status-pill status-in-stock">Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Law" data-status="Available">
+                                        <td>45435</td>
+                                        <td><div class="book-title">Before Crime Happens</div><div class="book-author">by Gabriel R. Eltina</div></td>
+                                        <td>Law</td>
+                                        <td>3 Books<br><span>(6 Total)</span></td>
+                                        <td><span class="book-status-pill status-in-stock">Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Technology" data-status="Not Available">
+                                        <td>214123</td>
+                                        <td><div class="book-title">Programming in C#</div><div class="book-author">by J. Griffin</div></td>
+                                        <td>Technology</td>
+                                        <td>0 Books<br><span>(7 Total)</span></td>
+                                        <td><span class="book-status-pill status-out-of-stock">Not Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Technology" data-status="Not Available">
+                                        <td>234234</td>
+                                        <td><div class="book-title">Introduction to Algorithms</div><div class="book-author">by Thomas H. Cormen</div></td>
+                                        <td>Technology</td>
+                                        <td>0 Books<br><span>(7 Total)</span></td>
+                                        <td><span class="book-status-pill status-out-of-stock">Not Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Law" data-status="Available">
+                                        <td>786585</td>
+                                        <td><div class="book-title">Statutory Construction</div><div class="book-author">by Ruben E. Agpalo</div></td>
+                                        <td>Law</td>
+                                        <td>3 Books<br><span>(10 Total)</span></td>
+                                        <td><span class="book-status-pill status-in-stock">Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-category="Tourism" data-status="Available">
+                                        <td>521312</td>
+                                        <td><div class="book-title">Overbooked</div><div class="book-author">by Elizabeth B. Sasser</div></td>
+                                        <td>Tourism</td>
+                                        <td>1 Book<br><span>(4 Total)</span></td>
+                                        <td><span class="book-status-pill status-in-stock">Available</span></td>
+                                        <td>
+                                            <div class="book-row-actions">
+                                                <button class="table-icon-btn" aria-label="Edit book" onclick="openBookInventoryModal(this.closest('tr'))">✎</button>
+                                                <button class="table-icon-btn danger" aria-label="Delete book" onclick="openDeleteBookModal(this.closest('tr'))">🗑</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="books-table-footer">
+                            <span>Showing 1 - 8 of 124 records</span>
+                            <div class="books-pagination">
+                                <button>Previous</button>
+                                <button class="active">1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button>...</button>
+                                <button>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="borrowing" class="page-section hidden">
+                    <div class="borrowing-shell">
+                        <div class="section-header borrowing-header">
+                            <div>
+                                <h2>Borrowing Management</h2>
+                                <p>Track and manage book lending, overdue items, and return requests.</p>
+                            </div>
+                        </div>
+
+                        <div class="borrowing-stats-row">
+                            <div class="borrowing-stat-card card-blue">
+                                <div class="stat-icon"><i data-lucide="book-open"></i></div>
+                                <div class="stat-details">
+                                    <span>Active Borrows</span>
+                                    <strong id="borrowingActiveCount">0</strong>
+                                </div>
+                            </div>
+                            <div class="borrowing-stat-card card-red">
+                                <div class="stat-icon"><i data-lucide="triangle-alert"></i></div>
+                                <div class="stat-details">
+                                    <span>Overdue Items</span>
+                                    <strong id="borrowingOverdueCount">0</strong>
+                                </div>
+                            </div>
+                            <div class="borrowing-stat-card card-muted">
+                                <div class="stat-icon"><i data-lucide="archive"></i></div>
+                                <div class="stat-details">
+                                    <span>Returned</span>
+                                    <strong id="borrowingReturnedCount">0</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="borrowing-toolbar">
+                            <div class="toolbar-left">
+                                <div class="toolbar-search">
+                                    <span class="search-icon"><i data-lucide="search"></i></span>
+                                    <input id="borrowSearchInput" type="text" oninput="filterBorrowingRows()" placeholder="Filter by borrower or book...">
+                                </div>
+                            </div>
+                            <div class="toolbar-right">
+                                <div class="toolbar-select">
+                                    <span class="select-icon"><i data-lucide="circle"></i></span>
+                                    <select id="borrowStatusFilter" onchange="filterBorrowingRows()">
+                                        <option value="all">Status: All Statuses</option>
+                                        <option value="borrowed">Borrowed</option>
+                                        <option value="due-soon">Due soon</option>
+                                        <option value="returned">Returned</option>
+                                        <option value="overdue">Overdue</option>
+                                    </select>
+                                </div>
+                                <div class="toolbar-select">
+                                    <span class="select-icon"><i data-lucide="calendar-range"></i></span>
+                                    <select id="borrowDateFilter" onchange="filterBorrowingRows()">
+                                        <option value="all">Date Range: All</option>
+                                        <option value="this-week">This week</option>
+                                        <option value="this-month">This month</option>
+                                        <option value="previous-month">Previous month</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="new-borrow-btn" onclick="openBorrowCheckoutModal()">+ New Borrow</button>
+                            </div>
+                        </div>
+
+                        <div class="borrowing-table-panel">
+                            <table class="borrowing-table">
+                                <thead>
+                                    <tr>
+                                        <th>Borrowed ID</th>
+                                        <th>Borrower</th>
+                                        <th>Book Details</th>
+                                        <th>Borrowed Date</th>
+                                        <th>Due Date</th>
+                                        <th>Return Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>TX-9402</td>
+                                        <td>
+                                            <div class="borrower-name">Ana Reyes</div>
+                                            <div class="borrower-sub">Student ID 113431</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Database Systems</div>
+                                            <div class="book-author">by J. Doe</div>
+                                        </td>
+                                        <td>Sep 10, 2026</td>
+                                        <td>Sep 24, 2026</td>
+                                        <td>—</td>
+                                        <td><span class="status-pill borrowed">Borrowed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9401</td>
+                                        <td>
+                                            <div class="borrower-name">Mark Santos</div>
+                                            <div class="borrower-sub">Student ID 114564</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Web Development with Node &amp; Express</div>
+                                            <div class="book-author">by Ethan Brown</div>
+                                        </td>
+                                        <td>Sep 10, 2026</td>
+                                        <td>Sep 17, 2026</td>
+                                        <td>—</td>
+                                        <td><span class="status-pill due-soon">Due soon</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9398</td>
+                                        <td>
+                                            <div class="borrower-name">Jessa Lim</div>
+                                            <div class="borrower-sub">Student ID 114563</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Computer Networking Basics</div>
+                                            <div class="book-author">by James Kurose</div>
+                                        </td>
+                                        <td>Sep 9, 2026</td>
+                                        <td>Sep 23, 2026</td>
+                                        <td>Sep 15, 2026</td>
+                                        <td><span class="status-pill returned">Returned</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9395</td>
+                                        <td>
+                                            <div class="borrower-name">Paul Cruz</div>
+                                            <div class="borrower-sub">Student ID 115632</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Principles of Information Security</div>
+                                            <div class="book-author">by Michael Whitman</div>
+                                        </td>
+                                        <td>Sep 8, 2026</td>
+                                        <td>Sep 15, 2026</td>
+                                        <td>—</td>
+                                        <td><span class="status-pill overdue">Overdue</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9394</td>
+                                        <td>
+                                            <div class="borrower-name">Mika Flores</div>
+                                            <div class="borrower-sub">Student ID 114356</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Programming in C#</div>
+                                            <div class="book-author">by J. Griffin</div>
+                                        </td>
+                                        <td>Sep 8, 2026</td>
+                                        <td>Sep 22, 2026</td>
+                                        <td>—</td>
+                                        <td><span class="status-pill active">Active</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9390</td>
+                                        <td>
+                                            <div class="borrower-name">Erin Rainer</div>
+                                            <div class="borrower-sub">Student ID 114345</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Introduction to Algorithms</div>
+                                            <div class="book-author">by Thomas Cormen</div>
+                                        </td>
+                                        <td>Sep 5, 2026</td>
+                                        <td>Oct 5, 2026</td>
+                                        <td>—</td>
+                                        <td><span class="status-pill borrowed">Borrowed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9388</td>
+                                        <td>
+                                            <div class="borrower-name">Elena Petrova</div>
+                                            <div class="borrower-sub">Student ID 114342</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Before Crime Happens</div>
+                                            <div class="book-author">by Gabriel Eltina</div>
+                                        </td>
+                                        <td>Sep 3, 2026</td>
+                                        <td>Sep 17, 2026</td>
+                                        <td>Sep 12, 2026</td>
+                                        <td><span class="status-pill returned">Returned</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TX-9385</td>
+                                        <td>
+                                            <div class="borrower-name">Robert Chen</div>
+                                            <div class="borrower-sub">Student ID 114567</div>
+                                        </td>
+                                        <td>
+                                            <div class="book-title">Overbooked</div>
+                                            <div class="book-author">by Elizabeth B. Sasser</div>
+                                        </td>
+                                        <td>Sep 1, 2026</td>
+                                        <td>Sep 15, 2026</td>
+                                        <td>—</td>
+                                        <td><span class="status-pill overdue">Overdue</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="borrowing-pagination">
+                            <span>Showing 1 - 8 of 124 records</span>
+                            <div class="pagination-controls">
+                                <button class="nav-btn prev">&lt; Previous</button>
+                                <button class="page active">1</button>
+                                <button class="page">2</button>
+                                <button class="page">3</button>
+                                <button class="page">...</button>
+                                <button class="nav-btn next">Next &gt;</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="returns" class="page-section hidden">
+                    <div class="returns-shell">
+                        <div class="section-header returns-header">
+                            <div>
+                                <h2>Return Book</h2>
+                                <p>Process book returns and manage return records.</p>
+                            </div>
+                        </div>
+
+                        <div class="returns-stats-row">
+                            <div class="returns-stat-card card-green">
+                                <div class="stat-icon"><i data-lucide="circle-check"></i></div>
+                                <div class="stat-details">
+                                    <span>Books Returned Today</span>
+                                    <strong id="returnsTodayCount">42</strong>
+                                </div>
+                            </div>
+                            <div class="returns-stat-card card-gold">
+                                <div class="stat-icon"><i data-lucide="clock"></i></div>
+                                <div class="stat-details">
+                                    <span>Pending Returns</span>
+                                    <strong id="returnsPendingCount">18</strong>
+                                </div>
+                            </div>
+                            <div class="returns-stat-card card-red">
+                                <div class="stat-icon"><i data-lucide="triangle-alert"></i></div>
+                                <div class="stat-details">
+                                    <span>Overdue Returns</span>
+                                    <strong id="returnsOverdueCount">8</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="returns-workspace">
+                            <div class="return-process-card">
+                                <h3>Process Return Transaction</h3>
+                                <form id="returnForm" class="return-form" onsubmit="processReturnSubmit(event)">
+                                    <div class="return-field-group">
+                                        <label for="returnTransaction">Scan or Enter Borrow ID / ISBN</label>
+                                        <div class="return-input-wrap">
+                                            <span class="return-input-icon"><i data-lucide="search"></i></span>
+                                            <input id="returnTransaction" type="text" autocomplete="off" placeholder="TX-9402" oninput="handleReturnLookup()">
+                                        </div>
+                                    </div>
+                                    <div class="return-field-group">
+                                        <label for="returnBorrowerName">Borrower Name Lookup</label>
+                                        <input id="returnBorrowerName" type="text" readonly placeholder="Auto-filled after scanning a record">
+                                    </div>
+                                    <button id="completeReturnBtn" type="submit" class="complete-return-btn">
+                                        <i data-lucide="circle-check"></i> Complete Return Processing
+                                    </button>
+                                    <p id="returnFormMessage" class="return-form-message" role="status" aria-live="polite"></p>
+                                </form>
+                            </div>
+
+                            <div class="scanned-book-card">
+                                <div class="scanned-book-header">
+                                    <h3>Scanned Book Details</h3>
+                                    <span id="scannedStatusBadge" class="scanned-badge badge-idle">Awaiting scan</span>
+                                </div>
+                                <div class="scanned-detail-list">
+                                    <div class="scanned-detail-row">
+                                        <span>Book Title</span>
+                                        <strong id="scannedBookTitle">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Borrower</span>
+                                        <strong id="scannedBorrower">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Borrow Date</span>
+                                        <strong id="scannedBorrowDate">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Due Date</span>
+                                        <strong id="scannedDueDate">—</strong>
+                                    </div>
+                                    <div class="scanned-detail-row">
+                                        <span>Return Condition</span>
+                                        <select id="returnCondition" class="return-condition-select">
+                                            <option>Good (No damage)</option>
+                                            <option>Minor Wear</option>
+                                            <option>Torn Cover</option>
+                                            <option>Damaged Spine</option>
+                                            <option>Lost Pages</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="return-records-panel">
+                            <div class="return-records-header">
+                                <div>
+                                    <h3>Recent Return Records</h3>
+                                    <p>Historical list of recently processed returns.</p>
+                                </div>
+                                <div class="return-records-filter">
+                                    <span class="return-filter-icon"><i data-lucide="filter"></i></span>
+                                    <select id="returnConditionFilter" onchange="filterReturnRecords()">
+                                        <option value="all">All Conditions</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Minor Wear">Minor Wear</option>
+                                        <option value="Torn Cover">Torn Cover</option>
+                                        <option value="Damaged Spine">Damaged Spine</option>
+                                        <option value="Lost Pages">Lost Pages</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="return-records-table-wrap">
+                                <table class="return-records-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Return ID</th>
+                                            <th>Borrower</th>
+                                            <th>Book Title</th>
+                                            <th>Borrowed</th>
+                                            <th>Due Date</th>
+                                            <th>Returned Date</th>
+                                            <th>Condition</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="returnRecordsBody"></tbody>
+                                </table>
+                            </div>
+                            <p id="returnRecordsEmpty" class="return-records-empty hidden">No return records match the selected condition.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="overdue" class="page-section hidden">
+                    <div class="overdue-shell">
+                        <div class="section-header overdue-header">
+                            <div>
+                                <h2>Overdue Monitoring</h2>
+                                <p>Track overdue books, manage penalty collection, and send reminders to borrowers.</p>
+                            </div>
+                        </div>
+
+                        <div class="overdue-stats-row">
+                            <div class="overdue-stat-card">
+                                <div class="overdue-stat-info">
+                                    <span>Total Overdue</span>
+                                    <strong><span id="overdueTotalCount">48</span> Books</strong>
+                                    <small>4 books since yesterday</small>
+                                </div>
+                                <div class="overdue-stat-icon plain"><i data-lucide="book-open"></i></div>
+                            </div>
+                            <div class="overdue-stat-card">
+                                <div class="overdue-stat-info">
+                                    <span>Critically Overdue (30+ days)</span>
+                                    <strong><span id="overdueCriticalCount">12</span> Books</strong>
+                                    <small>Requires immediate legal notice</small>
+                                </div>
+                                <div class="overdue-stat-icon icon-critical"><i data-lucide="triangle-alert"></i></div>
+                            </div>
+                            <div class="overdue-stat-card">
+                                <div class="overdue-stat-info">
+                                    <span>Pending Notices</span>
+                                    <strong><span id="overduePendingNoticeCount">8</span> Notices</strong>
+                                    <small>Queue waiting for approval</small>
+                                </div>
+                                <div class="overdue-stat-icon icon-notice"><i data-lucide="bell-ring"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="overdue-toolbar">
+                            <div class="overdue-segmented" id="overdueBucketFilters">
+                                <button type="button" class="overdue-seg active" data-bucket="all" onclick="setOverdueBucket('all', this)">All Records</button>
+                                <button type="button" class="overdue-seg" data-bucket="1-7" onclick="setOverdueBucket('1-7', this)">1-7 Days Overdue</button>
+                                <button type="button" class="overdue-seg" data-bucket="8-30" onclick="setOverdueBucket('8-30', this)">8-30 Days Overdue</button>
+                                <button type="button" class="overdue-seg" data-bucket="30+" onclick="setOverdueBucket('30+', this)">30+ Days (Critical)</button>
+                            </div>
+                            <div class="overdue-toolbar-actions">
+                                <button type="button" class="overdue-more-filters-btn" onclick="toggleOverdueMoreFilters()">
+                                    <i data-lucide="sliders-horizontal"></i> More Filters
+                                </button>
+                                <button type="button" class="overdue-reminders-btn" onclick="openBulkRemindersModal()">
+                                    <i data-lucide="send"></i> Send Bulk Reminders
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="overdue-more-filters hidden" id="overdueMoreFilters">
+                            <div class="overdue-search-wrap">
+                                <span class="overdue-search-icon"><i data-lucide="search"></i></span>
+                                <input id="overdueSearchInput" type="text" placeholder="Search borrow ID, borrower or book title..." oninput="applyOverdueFilters()">
+                            </div>
+                            <select id="overdueNoticeFilter" class="overdue-select" onchange="applyOverdueFilters()">
+                                <option value="all">Notice Status: All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Notice Sent">Notice Sent</option>
+                                <option value="Escalated">Escalated</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                            <button type="button" class="overdue-reset-btn" onclick="resetOverdueFilters()">Clear Filters</button>
+                        </div>
+
+                        <p id="overdueNoticeMessage" class="overdue-message" role="status" aria-live="polite"></p>
+
+                        <div class="overdue-table-panel">
+                            <div class="overdue-table-wrap">
+                                <table class="overdue-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Borrow ID</th>
+                                            <th>Borrower Name</th>
+                                            <th>Book Title</th>
+                                            <th>Borrow Date</th>
+                                            <th>Due Date</th>
+                                            <th>Days Overdue</th>
+                                            <th>Penalty (PHP 10/day)</th>
+                                            <th>Notice Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overdueTableBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="overdue-panel-footer">
+                                <span id="overdueFooterSummary">Showing 0 of 0 overdue records</span>
+                                <div class="overdue-pagination" id="overduePagination"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="notifications" class="page-section hidden">
+                    <div class="notifications-shell">
+                        <div class="section-header notifications-header">
+                            <div>
+                                <h2>Notifications</h2>
+                                <p>Library reminders, overdue alerts and system notices.</p>
+                            </div>
+                            <div class="notifications-actions">
+                                <span class="notifications-unread" id="notificationsUnread">0 unread</span>
+                                <button type="button" class="notifications-read-btn" onclick="markNotificationsRead()">
+                                    <i data-lucide="check-check"></i> Mark all as read
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="notifications-list" id="notificationsList"></div>
+                        <div class="notifications-empty hidden" id="notificationsEmpty">
+                            <i data-lucide="bell-off"></i>
+                            <p>No notifications right now.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="reports" class="page-section hidden">
+                    <div class="reports-shell">
+                        <div class="section-header reports-header">
+                            <div>
+                                <h2>Reports</h2>
+                                <p>Daily list of books borrowed and returned.</p>
+                            </div>
+                            <button type="button" class="report-print-btn no-print" onclick="printReport()"><i data-lucide="printer"></i> Print Report</button>
+                        </div>
+
+                        <div class="print-area">
+                            <div class="report-print-heading print-only">
+                                <h3>AKLATRACK - Daily Library Report</h3>
+                                <p id="reportPrintDate">—</p>
+                            </div>
+
+                            <div class="reports-toolbar no-print">
+                                <div class="report-date-filter">
+                                    <span class="report-date-icon"><i data-lucide="calendar-days"></i></span>
+                                    <input id="reportDateFilter" type="date" aria-label="Select report date" onchange="applyReportDate()">
+                                </div>
+                                <button type="button" class="report-day-btn" aria-label="Previous day" onclick="shiftReportDate(-1)"><i data-lucide="chevron-left"></i></button>
+                                <button type="button" class="report-day-btn" aria-label="Next day" onclick="shiftReportDate(1)"><i data-lucide="chevron-right"></i></button>
+                                <button type="button" class="report-today-btn" onclick="goToTodayReport()">Today</button>
+                                <div class="reports-segmented" id="reportTypeFilters">
+                                    <button type="button" class="report-seg active" data-type="all" onclick="setReportType('all', this)">All Activity</button>
+                                    <button type="button" class="report-seg" data-type="borrow" onclick="setReportType('borrow', this)">Borrowed</button>
+                                    <button type="button" class="report-seg" data-type="return" onclick="setReportType('return', this)">Returned</button>
+                                </div>
+                            </div>
+
+                            <div class="report-stats-row">
+                                <div class="report-stat-card">
+                                    <div class="report-stat-info">
+                                        <span>Books Borrowed</span>
+                                        <strong id="reportBorrowedCount">0</strong>
+                                        <small>Issued on the selected date</small>
+                                    </div>
+                                    <div class="report-stat-icon icon-borrow"><i data-lucide="book-copy"></i></div>
+                                </div>
+                                <div class="report-stat-card">
+                                    <div class="report-stat-info">
+                                        <span>Books Returned</span>
+                                        <strong id="reportReturnedCount">0</strong>
+                                        <small>Received on the selected date</small>
+                                    </div>
+                                    <div class="report-stat-icon icon-return"><i data-lucide="rotate-ccw"></i></div>
+                                </div>
+                                <div class="report-stat-card">
+                                    <div class="report-stat-info">
+                                        <span>Penalties Recorded</span>
+                                        <strong id="reportPenaltyTotal">₱0.00</strong>
+                                        <small>PHP 10 per late day</small>
+                                    </div>
+                                    <div class="report-stat-icon icon-penalty"><i data-lucide="banknote"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="report-table-panel">
+                                <div class="report-table-header">
+                                    <div>
+                                        <h3 id="reportListTitle">Borrow and Return Records</h3>
+                                        <p id="reportListDate">—</p>
+                                    </div>
+                                    <span class="report-list-count" id="reportListCount">0 transactions</span>
+                                </div>
+                                <div class="report-table-wrap">
+                                    <table class="report-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Transaction ID</th>
+                                                <th>Borrower</th>
+                                                <th>Book Title</th>
+                                                <th>Borrow Date</th>
+                                                <th>Due Date</th>
+                                                <th>Return Date</th>
+                                                <th>Penalty</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="reportTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <p id="reportEmptyState" class="report-empty hidden">No borrow or return transactions on the selected date.</p>
+                                <div class="report-table-footer">
+                                    <span id="reportFooterSummary">Showing 0 transactions</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="borrowerModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="borrower-modal modal-content bg-white rounded-2xl w-full max-w-2xl p-0 overflow-hidden">
+            <div class="borrower-modal-header">
+                <button class="close-btn" type="button" onclick="closeModal('borrowerModal')"><i data-lucide="x"></i></button>
+            </div>
+
+            <form onsubmit="handleAddBorrower(event)" class="borrower-modal-form">
+                <div class="field-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowerId">ID Number / Student ID <span>*</span></label>
+                        <input id="borrowerId" type="text" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowerType">Role <span>*</span></label>
+                        <select id="borrowerType" required>
+                            <option>Student</option>
+                            <option>Instructor</option>
+                            <option>Staff</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowerFirstName">First Name <span>*</span></label>
+                        <input id="borrowerFirstName" type="text" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowerLastName">Last Name <span>*</span></label>
+                        <input id="borrowerLastName" type="text" required>
+                    </div>
+                </div>
+
+                <div class="field-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowerEmail">Email Address <span>*</span></label>
+                        <input id="borrowerEmail" type="email" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowerCellphone">Cellphone Number <span>*</span></label>
+                        <input id="borrowerCellphone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="09XX XXX XXXX" pattern="09[0-9]{9}" maxlength="11" required>
+                    </div>
+                </div>
+
+                <div class="field-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowerDepartment">Department / Program <span>*</span></label>
+                        <select id="borrowerDepartment" required>
+                            <option>BS Information Technology</option>
+                            <option>BS Education</option>
+                            <option>BS Nursing</option>
+                            <option>BS Business Management</option>
+                            <option>BS Hotel Management</option>
+                            <option>BS Realty Management</option>
+                            <option>BS Criminology</option>
+                            <option>BS Tourism Management</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowerLimit">Borrow Limit <span>*</span></label>
+                        <select id="borrowerLimit" required>
+                            <option>3 Books (Standard Limit)</option>
+                            <option>5 Books</option>
+                            <option>10 Books</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowerStatus">Account Status <span>*</span></label>
+                        <select id="borrowerStatus" required>
+                            <option>Active</option>
+                            <option>Suspended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="borrower-modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('borrowerModal')">Cancel</button>
+                    <button type="submit" class="save-btn">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="borrowerRecordsModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="borrower-records-modal modal-content bg-white rounded-2xl w-full max-w-3xl p-0 overflow-hidden">
+            <div class="borrower-records-header">
+                <div>
+                    <h3>Borrower Records</h3>
+                    <p id="borrowerRecordsName">Borrower</p>
+                </div>
+                <button class="close-btn" type="button" onclick="closeModal('borrowerRecordsModal')"><i data-lucide="x"></i></button>
+            </div>
+            <div class="borrower-records-body">
+                <div class="borrower-records-summary">
+                    <div class="summary-card"><span>Total Books</span><strong id="borrowerRecordsTotal">0</strong></div>
+                    <div class="summary-card status-returned"><span>Returned</span><strong id="borrowerRecordsReturned">0</strong></div>
+                    <div class="summary-card status-borrowed"><span>Still Borrowed</span><strong id="borrowerRecordsBorrowed">0</strong></div>
+                    <div class="summary-card status-overdue"><span>Overdue</span><strong id="borrowerRecordsOverdue">0</strong></div>
+                </div>
+                <div class="borrower-records-table-wrap">
+                    <table class="borrower-records-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowerRecordsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="borrowCheckoutModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="borrow-checkout-modal modal-content bg-white rounded-2xl w-full max-w-3xl p-0 overflow-hidden">
+            <div class="borrow-checkout-header">
+                <div>
+                    <h3>Issue Book Checkout Form</h3>
+                </div>
+                <button class="close-btn" type="button" onclick="closeModal('borrowCheckoutModal')"><i data-lucide="x"></i></button>
+            </div>
+
+            <form onsubmit="submitBorrowCheckout(event)" class="borrow-checkout-form">
+                <div class="borrow-checkout-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowCheckoutBorrower">Borrower ID / Student ID</label>
+                        <input id="borrowCheckoutBorrower" type="text" value="ST-113431" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowCheckoutBookId">Book Accession / Book ID</label>
+                        <input id="borrowCheckoutBookId" type="text" value="CC-001" required>
+                    </div>
+                </div>
+
+                <div class="borrow-checkout-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowCheckoutBookTitle">Book Title</label>
+                        <input id="borrowCheckoutBookTitle" type="text" value="Database Systems" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowCheckoutBorrowerName">Borrower Name</label>
+                        <input id="borrowCheckoutBorrowerName" type="text" value="Ana Reyes" required>
+                    </div>
+                </div>
+
+                <div class="borrow-checkout-grid two-col">
+                    <div class="field-group">
+                        <label for="borrowCheckoutBorrowDate">Borrow Date</label>
+                        <input id="borrowCheckoutBorrowDate" type="date" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="borrowCheckoutDueDate">Due Date</label>
+                        <input id="borrowCheckoutDueDate" type="date" required>
+                    </div>
+                </div>
+
+                <div class="borrow-checkout-grid single-col">
+                    <div class="field-group">
+                        <label for="borrowCheckoutLibrarian">Librarian / Staff Name</label>
+                        <input id="borrowCheckoutLibrarian" type="text" value="Admin Librarian" required>
+                    </div>
+                </div>
+
+                <div class="borrower-modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('borrowCheckoutModal')">Cancel</button>
+                    <button type="submit" class="save-btn">Confirm Checkout</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="bookModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="book-modal-card">
+            <div class="book-modal-header">
+                <h3>Add New Book</h3>
+                <button type="button" class="book-modal-close" onclick="closeModal('bookModal')"><i data-lucide="x"></i></button>
+            </div>
+
+            <form onsubmit="handleAddBook(event)" class="book-modal-form">
+                <div class="book-field-grid">
+                    <div class="book-field-group">
+                        <label for="bookIsbn">ISBN</label>
+                        <input id="bookIsbn" type="text" required placeholder="978-0-123456-78-9">
+                    </div>
+                    <div class="book-field-group">
+                        <label for="bookTitle">Book Title</label>
+                        <input id="bookTitle" type="text" required placeholder="A Handbook of Software Engineering">
+                    </div>
+                </div>
+
+                <div class="book-field-grid">
+                    <div class="book-field-group">
+                        <label for="bookAuthor">Author</label>
+                        <input id="bookAuthor" type="text" required placeholder="Robert C. Martin">
+                    </div>
+                    <div class="book-field-group">
+                        <label for="bookCategory">Category</label>
+                        <select id="bookCategory" required>
+                            <option>Technology</option>
+                            <option>Law</option>
+                            <option>Tourism</option>
+                            <option>Business</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="book-field-grid">
+                    <div class="book-field-group">
+                        <label for="bookPublishedYear">Published Year</label>
+                        <input id="bookPublishedYear" type="text" required placeholder="2024">
+                    </div>
+                    <div class="book-field-group">
+                        <label for="bookTotalCopies">Total Copies</label>
+                        <input id="bookTotalCopies" type="number" min="1" required value="5">
+                    </div>
+                </div>
+
+                <div class="book-field-grid">
+                    <div class="book-field-group">
+                        <label for="bookAvailableCopies">Available Copies</label>
+                        <input id="bookAvailableCopies" type="number" min="0" required value="2">
+                    </div>
+                    <div class="book-field-group">
+                        <label for="bookShelfLocation">Shelf Location / Call Number</label>
+                        <input id="bookShelfLocation" type="text" required placeholder="QA76.76.C65 M37 2024">
+                    </div>
+                </div>
+
+                <div class="book-field-group full-width">
+                    <label for="bookDescription">Description / Synopsis</label>
+                    <textarea id="bookDescription" required placeholder="Add a brief description of the book..."></textarea>
+                </div>
+
+                <div class="book-modal-actions">
+                    <button type="button" class="book-cancel-btn" onclick="closeModal('bookModal')">Back</button>
+                    <button type="submit" class="book-save-btn">Save Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="bookInventoryModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="book-inventory-modal-card">
+            <div class="book-modal-header">
+                <h3>Edit Book Details &amp; Inventory</h3>
+                <button type="button" class="book-modal-close" onclick="closeModal('bookInventoryModal')"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="book-inventory-body">
+                <div class="book-inventory-summary">
+                    <div class="book-summary-card">
+                        <span>Total Book</span>
+                        <strong id="inventoryTotalBooks">0</strong>
+                    </div>
+                    <div class="book-summary-card card-warning">
+                        <span>Copies / Issued</span>
+                        <strong id="inventoryCopiesState">0 / 0</strong>
+                    </div>
+                </div>
+
+                <div class="book-inventory-grid">
+                    <div class="book-field-group">
+                        <label for="inventoryBookIsbn">ISBN</label>
+                        <input id="inventoryBookIsbn" type="text" value="978-0-123456-78-9">
+                    </div>
+                    <div class="book-field-group">
+                        <label for="inventoryBookTitle">Book Title</label>
+                        <input id="inventoryBookTitle" type="text" value="Database Systems">
+                    </div>
+                </div>
+
+                <div class="book-inventory-grid">
+                    <div class="book-field-group">
+                        <label for="inventoryBookAuthor">Author</label>
+                        <input id="inventoryBookAuthor" type="text" value="Thomas Connolly">
+                    </div>
+                    <div class="book-field-group">
+                        <label for="inventoryBookCategory">Category</label>
+                        <select id="inventoryBookCategory">
+                            <option>Technology</option>
+                            <option>Law</option>
+                            <option>Tourism</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="book-copy-actions">
+                    <button type="button" class="book-action-btn primary" onclick="openInventoryCopyModal()">+ Add New Physical Copy</button>
+                </div>
+
+                <div class="book-copy-table-wrap">
+                    <table class="book-copy-table">
+                        <thead>
+                            <tr>
+                                <th>Copy ID</th>
+                                <th>Condition / Status</th>
+                                <th>Location</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryCopyTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="book-modal-actions">
+                    <button type="button" class="book-cancel-btn" onclick="closeModal('bookInventoryModal')">Cancel</button>
+                    <button type="button" class="book-save-btn" onclick="closeModal('bookInventoryModal')">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="inventoryCopyModal" class="modal-backdrop copy-modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="book-modal-card copy-modal-card" role="dialog" aria-modal="true" aria-labelledby="inventoryCopyModalTitle">
+            <div class="book-modal-header">
+                <h3 id="inventoryCopyModalTitle">Add Physical Copy</h3>
+                <button type="button" class="book-modal-close" aria-label="Close" onclick="closeModal('inventoryCopyModal')"><i data-lucide="x"></i></button>
+            </div>
+            <form class="book-modal-form" onsubmit="saveInventoryCopy(event)">
+                <div class="book-field-grid">
+                    <div class="book-field-group">
+                        <label for="inventoryCopyCondition">Condition</label>
+                        <select id="inventoryCopyCondition" required>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Damaged">Damaged</option>
+                        </select>
+                    </div>
+                    <div class="book-field-group">
+                        <label for="inventoryCopyLocation">Location</label>
+                        <input id="inventoryCopyLocation" type="text" required placeholder="e.g. Shelf A-12">
+                    </div>
+                </div>
+                <div class="book-modal-actions">
+                    <button type="button" class="book-cancel-btn" onclick="closeModal('inventoryCopyModal')">Cancel</button>
+                    <button type="submit" class="book-save-btn">Add Copy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteBookModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="delete-book-modal-card">
+            <div class="delete-book-modal-header">
+                <h3>Delete Book</h3>
+                <button type="button" class="book-modal-close" aria-label="Close" onclick="closeDeleteBookModal()">✕</button>
+            </div>
+            <div class="delete-book-modal-body">
+                <div class="delete-book-list-header">
+                    <span>Book Title &amp; Author</span>
+                    <span>Category</span>
+                    <span>Copies</span>
+                    <span>Action</span>
+                </div>
+                <div id="deleteBookList" class="delete-book-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bulkRemindersModal" class="modal-backdrop fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-6 z-50">
+        <div class="bulk-reminders-modal modal-content">
+            <div class="bulk-reminders-header">
+                <div class="bulk-reminders-title">
+                    <span class="bulk-reminders-title-icon"><i data-lucide="mail-check"></i></span>
+                    <div>
+                        <h3>Send Bulk Reminders</h3>
+                        <p>Dispatch automated notifications to borrowers with active overdue items.</p>
+                    </div>
+                </div>
+                <button type="button" class="bulk-reminders-close" aria-label="Close" onclick="closeModal('bulkRemindersModal')"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="bulk-reminders-body">
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">1. Select Target Recipient Group <span class="required-mark">*</span></p>
+                    <div class="recipient-group-grid">
+                        <label class="recipient-option">
+                            <input type="radio" name="reminderGroup" value="all" checked onchange="updateBulkRemindersSummary()">
+                            <span class="recipient-option-text">
+                                <strong>All Overdue (<span id="recipientAllCount">48</span>)</strong>
+                                <small>All 48 books</small>
+                            </span>
+                        </label>
+                        <label class="recipient-option">
+                            <input type="radio" name="reminderGroup" value="1-7" onchange="updateBulkRemindersSummary()">
+                            <span class="recipient-option-text">
+                                <strong>1-7 Days Late (<span id="recipientLateCount">22</span>)</strong>
+                                <small>First reminder batch</small>
+                            </span>
+                        </label>
+                        <label class="recipient-option">
+                            <input type="radio" name="reminderGroup" value="30+" onchange="updateBulkRemindersSummary()">
+                            <span class="recipient-option-text">
+                                <strong>30+ Days Critical (<span id="recipientCriticalCount">12</span>)</strong>
+                                <small>Final notice &amp; legal action</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">2. Delivery Channels</p>
+                    <div class="channel-options">
+                        <label class="channel-option">
+                            <input type="checkbox" id="reminderChannelEmail" checked onchange="updateBulkRemindersSummary()">
+                            <span class="channel-option-text">
+                                <strong>Email Notification</strong>
+                                <small>Registered email address</small>
+                            </span>
+                        </label>
+                        <label class="channel-option">
+                            <input type="checkbox" id="reminderChannelSms" onchange="updateBulkRemindersSummary()">
+                            <span class="channel-option-text">
+                                <strong>SMS Notification</strong>
+                                <small>Registered mobile number</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">3. Select Reminder Template</p>
+                    <select id="reminderTemplate" class="bulk-reminders-select" onchange="updateBulkReminderPreview()">
+                        <option value="standard">Standard Overdue Notice (Includes Book Details)</option>
+                        <option value="first">First Reminder (Friendly Reminder)</option>
+                        <option value="final">Final Notice (Legal Warning)</option>
+                    </select>
+                    <div class="message-preview">
+                        <p class="message-preview-title">Message Preview</p>
+                        <p class="message-preview-subject" id="reminderPreviewSubject"></p>
+                        <p class="message-preview-body" id="reminderPreviewBody"></p>
+                    </div>
+                    <div class="message-preview sms-preview hidden" id="reminderSmsPreview">
+                        <p class="message-preview-title">SMS Preview (Max 160 characters)</p>
+                        <p class="message-preview-body" id="reminderSmsPreviewBody"></p>
+                        <p class="message-preview-count" id="reminderSmsPreviewCount"></p>
+                    </div>
+                </div>
+
+                <div class="dispatch-summary">
+                    <span class="dispatch-summary-icon"><i data-lucide="circle-check"></i></span>
+                    <div>
+                        <strong>Ready to Dispatch</strong>
+                        <p id="reminderDispatchSummaryText">Total Message: 48 Emails • Target: 48 Borrowers</p>
+                    </div>
+                </div>
+
+                <div class="bulk-reminders-section">
+                    <p class="bulk-reminders-label">4. Dispatch Time</p>
+                    <div class="dispatch-time-row">
+                        <label class="dispatch-time-option">
+                            <input type="radio" name="reminderDispatchTime" value="now" checked onchange="updateBulkRemindersSummary()">
+                            <span>Send Immediately</span>
+                        </label>
+                        <label class="dispatch-time-option">
+                            <input type="radio" name="reminderDispatchTime" value="schedule" onchange="updateBulkRemindersSummary()">
+                            <span>Schedule for Later Date</span>
+                        </label>
+                        <input id="reminderScheduleDate" type="date" class="bulk-reminders-date hidden" disabled aria-label="Schedule date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bulk-reminders-actions">
+                <p id="bulkRemindersError" class="bulk-reminders-error hidden"></p>
+                <div class="bulk-reminders-buttons">
+                    <button type="button" class="bulk-reminders-send" onclick="sendBulkReminders()"><i data-lucide="send"></i> Send Reminders Now</button>
+                    <button type="button" class="bulk-reminders-cancel" onclick="closeModal('bulkRemindersModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/books.js"></script>
+    <script src="js/borrowing.js"></script>
+    <script src="js/returns.js"></script>
+    <script src="js/overdue.js"></script>
+    <script src="js/records.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/modals.js"></script>
+</body>
+</html>
